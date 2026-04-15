@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('phieu_nhap', function (Blueprint $table) {
     $table->id('id_phieu_nhap');
+     $table->unsignedBigInteger('id_ncc')->nullable();
     $table->timestamp('ngay_nhap')->useCurrent();
 
     $table->unsignedBigInteger('id_ncc')->nullable();

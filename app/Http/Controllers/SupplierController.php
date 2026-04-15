@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Supplier;
+use App\Models\Product;
 class SupplierController extends Controller
 {
      public function index() {
@@ -45,4 +46,10 @@ class SupplierController extends Controller
         $supplier->delete();
         return redirect()->route('suppliers.index')->with('success','Xóa thành công');
     }
+
+    public function getProducts($id) {
+    $products = Product::where('id_ncc', $id)->get();
+    return response()->json($products);
+}
+
 }
