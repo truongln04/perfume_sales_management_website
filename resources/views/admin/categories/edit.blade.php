@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <h3 class="fw-bold text-primary mb-3">Chỉnh sửa danh mục</h3>
 
-    <form action="{{ route('categories.update', $dm->id_danh_muc) }}" method="POST">
+    <form action="{{ route('admin.categories.update', $dm->id_danh_muc) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -32,7 +32,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Cập nhật</button>
-        <a href="{{ route('categories.index') }}" class="btn btn-secondary">Hủy</a>
+        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
 @endsection

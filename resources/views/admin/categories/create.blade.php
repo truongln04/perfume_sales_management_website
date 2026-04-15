@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <h3 class="fw-bold text-primary mb-3">Thêm mới danh mục</h3>
 
-    <form action="{{ route('categories.store') }}" method="POST">
+    <form action="{{ route('admin.categories.store') }}" method="POST">
         @csrf
         <div class="mb-3">
             <label for="ten_danh_muc" class="form-label">Tên danh mục</label>
@@ -30,7 +30,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Lưu</button>
-        <a href="{{ route('categories.index') }}" class="btn btn-secondary">Hủy</a>
+        <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
 @endsection

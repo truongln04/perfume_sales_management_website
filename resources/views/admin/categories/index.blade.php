@@ -4,40 +4,83 @@
 @section('header', 'Quản lý danh mục')
 
 @section('content')
-<div class="container-fluid">
-    <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Thêm mới</a>
+<div class="card mt-3">
 
+    {{-- Header --}}
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="m-0 text-primary fw-bold">Quản lý danh mục</h5>
+
+        <div class="d-flex gap-2">
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">
+                Thêm mới
+            </a>
+
+            {{-- Tìm kiếm --}}
+            <form method="GET" action="{{ route('admin.categories.index') }}">
+                <input type="text"
+                       name="search"
+                       class="form-control"
+                       placeholder="Tìm theo tên danh mục..."
+                       value="{{ request('search') }}">
+            </form>
+        </div>
+    </div>
+
+    {{-- Thông báo --}}
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success m-3 mb-0">
+            {{ session('success') }}
+        </div>
     @endif
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên danh mục</th>
-                <th>Mô tả</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($categories as $c)
+    {{-- Bảng dữ liệu --}}
+    <div class="card-body p-0">
+        <table class="table table-hover table-striped m-0 align-middle">
+            <thead class="table-light">
                 <tr>
-                    <td>{{ $c->id_danh_muc }}</td>
-                    <td>{{ $c->ten_danh_muc }}</td>
-                    <td>{{ $c->mo_ta }}</td>
+                    <th>ID</th>
+                    <th>Tên danh mục</th>
+                    <th>Mô tả</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            @forelse($categories as $category)
+                <tr>
+                    <td>{{ $category->id_danh_muc }}</td>
+
+                    <td>{{ $category->ten_danh_muc }}</td>
+
+                    <td>{{ $category->mo_ta }}</td>
+
                     <td>
-                        <a href="{{ route('categories.edit', $c) }}" class="btn btn-sm btn-outline-primary">Sửa</a>
-                        <form action="{{ route('categories.destroy', $c) }}" method="POST" style="display:inline;">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Xóa danh mục này?')">Xóa</button>
+                        <a href="{{ route('admin.categories.edit', $category->id_danh_muc) }}"
+                           class="btn btn-sm btn-warning">
+                            Sửa
+                        </a>
+
+                        <form action="{{ route('admin.categories.destroy', $category->id_danh_muc) }}"
+                              method="POST"
+                              style="display:inline-block"
+                              onsubmit="return confirm('Xóa danh mục này?')">
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Xóa
+                            </button>
                         </form>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="4" class="text-center">Không có dữ liệu</td></tr>
+                <tr>
+                    <td colspan="4" class="text-center">Không có dữ liệu</td>
+                </tr>
             @endforelse
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 @endsection
