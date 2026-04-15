@@ -78,9 +78,8 @@
             </tbody>
         </table>
 
-        <div class="p-3">
-            {{ $orders->withQueryString()->links() }}
-        </div>
+        {{ $orders->withQueryString()->links('pagination::bootstrap-5') }}
+
     </div>
 </div>
 @endsection
