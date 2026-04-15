@@ -53,14 +53,14 @@
         </div>
         <nav class="nav flex-column px-2 py-3 flex-grow-1">
             <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-home me-2"></i>Trang chủ</a>
-            <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-users me-2"></i>Tài khoản</a>
+            <a href="{{ route('accounts.index') }}" class="nav-link text-white"><i class="fa fa-users me-2"></i>Tài khoản</a>
             <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-tags me-2"></i>Danh mục</a>
             <a href="{{ route('brands.index') }}" class="nav-link text-white"><i class="fa fa-industry me-2"></i>Thương hiệu</a>
             <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-box me-2"></i>Sản phẩm</a>
             <a href="{{ route('suppliers.index') }}" class="nav-link text-white"><i class="fa fa-truck me-2"></i>Nhà cung cấp</a>
             <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-clipboard-list me-2"></i>Phiếu nhập</a>
             <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-warehouse me-2"></i>Tồn kho</a>
-            <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-shopping-cart me-2"></i>Đơn hàng</a>
+            <a href="{{ route('orders.index') }}" class="nav-link text-white"><i class="fa fa-shopping-cart me-2"></i>Đơn hàng</a>
             <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-chart-bar me-2"></i>Báo cáo</a>
         </nav>
         <div class="p-3 border-top text-center">
