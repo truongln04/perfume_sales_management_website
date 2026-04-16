@@ -49,7 +49,7 @@ class AccountController extends Controller
         'vai_tro'      => $request->vai_tro,
         ]);
 
-        return redirect()->route('accounts.index')
+        return redirect()->route('admin.accounts.index')
             ->with('success', 'Thêm tài khoản thành công!');
     }
 
@@ -83,7 +83,7 @@ class AccountController extends Controller
 
         $account->save();
 
-        return redirect()->route('accounts.index')
+        return redirect()->route('admin.accounts.index')
             ->with('success', 'Cập nhật tài khoản thành công!');
     }
 
@@ -93,7 +93,7 @@ class AccountController extends Controller
         $account = User::findOrFail($id);
         $account->delete();
 
-        return redirect('accounts')
+        return redirect()->route('admin.accounts.index')
             ->with('success', 'Xóa tài khoản thành công!');
     }
 

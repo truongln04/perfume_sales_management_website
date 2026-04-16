@@ -48,16 +48,8 @@ class User extends Authenticatable
         'mat_khau'
     ];
 
-    /**
-     * Ép kiểu dữ liệu
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function getAuthPassword()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->mat_khau;
     }
 }
