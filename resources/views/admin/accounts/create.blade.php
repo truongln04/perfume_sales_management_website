@@ -7,7 +7,7 @@
     </div>
 
     <div class="card-body">
-        <form action="{{ route('accounts.store') }}" method="POST">
+        <form action="{{ route('admin.accounts.store') }}" method="POST">
             @csrf
             
             <input class="form-control mb-2" name="ten_hien_thi" placeholder="Tên hiển thị">
@@ -24,7 +24,7 @@
             </select>
 
             <button class="btn btn-primary">Lưu</button>
-            <a href="{{ route('accounts.index') }}" class="btn btn-secondary">Quay lại</a>
+            <a href="{{ route('admin.accounts.index') }}" class="btn btn-secondary">Quay lại</a>
         </form>
     </div>
 </div>

@@ -7,7 +7,7 @@
     </div>
 
     <div class="card-body">
-        <form action="{{ route('accounts.update', $account->id_tai_khoan) }}" method="POST">
+        <form action="{{ route('admin.accounts.update', $account->id_tai_khoan) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -36,7 +36,7 @@
             </select>
 
             <button class="btn btn-primary">Cập nhật</button>
-            <a href="{{ route('accounts.index') }}" class="btn btn-secondary">Quay lại</a>
+            <a href="{{ route('admin.accounts.index') }}" class="btn btn-secondary">Quay lại</a>
         </form>
     </div>
 </div>

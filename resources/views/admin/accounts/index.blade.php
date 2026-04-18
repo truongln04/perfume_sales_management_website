@@ -7,7 +7,7 @@
         <h5 class="m-0 text-primary fw-bold">Quản lý tài khoản</h5>
 
         <div class="d-flex gap-2">
-            <a href="{{ url('accounts/create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.accounts.create') }}" class="btn btn-primary">
                 Thêm mới
             </a>
 
@@ -21,11 +21,7 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="m-3 alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
+   
 
     <div class="card-body p-0">
         <table class="table table-hover table-striped m-0">
@@ -75,12 +71,12 @@
                     <td>{{ $acc->google_id }}</td>
 
                     <td>
-                        <a href="{{ route('accounts.edit', $acc->id_tai_khoan) }}"
+                        <a href="{{ route('admin.accounts.edit', $acc->id_tai_khoan) }}"
                            class="btn btn-sm btn-warning">
                             Sửa
                         </a>
 
-                        <form action="{{ route('accounts.destroy', $acc->id_tai_khoan) }}"
+                        <form action="{{ route('admin.accounts.destroy', $acc->id_tai_khoan) }}"
       method="POST"
       style="display:inline-block"
       onsubmit="return confirm('Xóa tài khoản này?')">

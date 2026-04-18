@@ -10,43 +10,57 @@ use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\OrderController;
+<<<<<<< HEAD
 use App\Http\Controllers\DashboardController;
  use App\Http\Controllers\ReportController;
+=======
+use App\Http\Controllers\AuthController;
+>>>>>>> 4da78598506ce60f280ec74e0fd51323d061f9ad
 
 // Trang chủ
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Admin
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+/* AUTH */
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'showLogin')->name('login');
+    Route::post('/login', 'login');
 
-// Products
-Route::resource('products', ProductController::class);
+    Route::get('/register', 'showRegister')->name('register');
+    Route::post('/register', 'register');
 
-// Categories
-Route::resource('categories', CategoryController::class);
+    Route::post('/logout', 'logout')
+        ->middleware('auth')
+        ->name('logout');
+});
 
-// Suppliers
-Route::resource('suppliers', SupplierController::class);
+Route::prefix('admin')
+    ->middleware(['auth', 'admin'])
+    ->as('admin.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
 
-Route::get('/suppliers/{id}/products', [SupplierController::class, 'getProducts']);
+    // Products
+    Route::resource('products', ProductController::class);
 
-// Brands
-Route::resource('brands', BrandController::class);
+    // Categories
+    Route::resource('categories', CategoryController::class);
 
-// Receipts
-Route::resource('receipts', ReceiptController::class);
+    // Suppliers
+    Route::resource('suppliers', SupplierController::class);
+    Route::get('/suppliers/{id}/products', [SupplierController::class, 'getProducts'])
+        ->name('admin.suppliers.products');
 
-// Warehouse
-Route::resource('warehouse', WarehouseController::class);
-Route::get('/warehouse/search', [WarehouseController::class, 'search']);
+    // Brands
+    Route::resource('brands', BrandController::class);
 
-//
-Route::resource('accounts', AccountController::class)->except(['show']);
+    // Receipts
+    Route::resource('receipts', ReceiptController::class);
 
+<<<<<<< HEAD
 Route::resource('orders', OrderController::class);
 
 // Cho Blade
@@ -61,4 +75,16 @@ Route::prefix('reports')->group(function () {
     Route::get('/donhang', [ReportController::class, 'donHang'])->name('reports.donhang');
     Route::get('/tonkho', [ReportController::class, 'tonKho'])->name('reports.tonkho');
     Route::get('/banchay', [ReportController::class, 'banChay'])->name('reports.banchay');
+=======
+    // Warehouse
+    Route::resource('warehouse', WarehouseController::class);
+    Route::get('/warehouse/search', [WarehouseController::class, 'search'])
+        ->name('admin.warehouse.search');
+
+    // Accounts
+    Route::resource('accounts', AccountController::class)->except(['show']);
+
+    // Orders
+    Route::resource('orders', OrderController::class);
+>>>>>>> 4da78598506ce60f280ec74e0fd51323d061f9ad
 });
