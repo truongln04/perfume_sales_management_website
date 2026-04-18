@@ -36,21 +36,13 @@
                     @csrf
                     <button class="btn btn-danger btn-sm">Logout</button>
                 </form>
-
-            @else
-                <a href="{{ route('login') }}" class="btn btn-primary btn-sm">Login</a>
-                <a href="{{ route('register') }}" class="btn btn-success btn-sm">Register</a>
             @endauth
 
         </div>
     </div>
 </nav>
 
-<div class="container mt-4">
-
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
+<div class="container mt-4">   
 
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>

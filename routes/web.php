@@ -28,6 +28,24 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register');
 
     Route::post('/logout', 'logout')->middleware('auth')->name('logout');
+
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])
+    ->name('password.request');
+
+Route::post('/send-reset-code', [AuthController::class, 'sendResetCode'])
+    ->name('password.send.code');
+
+Route::get('/reset-password', [AuthController::class, 'showResetPasswordForm'])
+    ->name('password.reset.form');
+
+Route::post('/confirm-reset', [AuthController::class, 'confirmResetPassword'])
+    ->name('password.confirm.reset');
+
+Route::post('/resend-otp', [AuthController::class, 'resendOtp'])
+    ->name('password.resend');
+
+    Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle']);
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 });
 
 /* ADMIN */
@@ -36,7 +54,7 @@ Route::prefix('admin')
     ->as('admin.')
     ->group(function () {
         // Dashboard
-        Route::get('/dashboard', function () {
+       Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
 
@@ -78,7 +96,7 @@ Route::prefix('admin')
     });
 
 /* CLIENT */
-// Route::prefix('client')->group(function () {
+//Route::prefix('client')->group(function () {
     Route::get('/', [ClientController::class, 'home'])->name('client.home');
     Route::get('/products', [ClientController::class, 'products'])->name('client.products');
     Route::get('/product/{id}', [ClientController::class, 'product'])->name('client.product');
@@ -86,4 +104,4 @@ Route::prefix('admin')
     Route::get('/cart', [ClientController::class, 'cart'])->name('client.cart');
     Route::get('/orderslist', [ClientController::class, 'orderslist'])->name('client.orderslist');
     Route::get('/profile', [ClientController::class, 'profile'])->name('client.profile');
-// });
+//});
