@@ -10,9 +10,21 @@ use App\Models\Product;
 
 class ReceiptController extends Controller
 {
-     public function index() {
-        $receipts = Receipt::with('supplier')->get();
-        return view('admin.receipts.index', compact('receipts'));
+     public function index(Request $request) {
+    $query = Receipt::with('supplier'); // load quan hệ luôn ở đây
+
+    if ($request->filled('search')) {
+        $kw = $request->search;
+        $query->where(function($q) use ($kw) {
+            $q->where('id_phieu_nhap','like','%'.$kw.'%')
+              ->orWhere('ghi_chu','like','%'.$kw.'%');
+        });
+    }
+
+    // Phân trang, không dùng get()
+    $receipts = $query->paginate(10);
+
+    return view('admin.receipts.index', compact('receipts'));
     }
 
     public function create() {

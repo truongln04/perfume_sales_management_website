@@ -7,10 +7,22 @@ use App\Models\Supplier;
 use App\Models\Product;
 class SupplierController extends Controller
 {
-     public function index() {
-        $suppliers = Supplier::all();
-        return view('admin.suppliers.index', compact('suppliers'));
+     public function index(Request $request)
+{
+    $query = Supplier::query();
+
+    if ($request->filled('keyword')) {
+        $kw = $request->keyword;
+        $query->where('ten_ncc','like','%'.$kw.'%')
+              ->orWhere('email','like','%'.$kw.'%')
+              ->orWhere('sdt','like','%'.$kw.'%');
     }
+
+    $suppliers = $query->paginate(10);
+
+    return view('admin.suppliers.index', compact('suppliers'));
+}
+
 
     public function create() {
         return view('admin.suppliers.create');

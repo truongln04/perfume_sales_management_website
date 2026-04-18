@@ -9,10 +9,42 @@ use App\Models\Supplier;
 
 class ProductController extends Controller
 {
-    public function index() {
-         $products = Product::with(['warehouse','receiptDetails'])->get();
-        return view('admin.products.index', compact('products'));
+    public function index(Request $request)
+{
+    $query = Product::query();
+
+    // Tìm theo keyword
+    if ($request->filled('keyword')) {
+        $kw = $request->keyword;
+        $query->where(function($q) use ($kw) {
+            $q->where('ten_san_pham','like','%'.$kw.'%')
+              ->orWhere('id_san_pham','like','%'.$kw.'%');
+        });
     }
+
+    // Lọc theo danh mục (riêng hoặc kết hợp)
+    if ($request->filled('id_danh_muc')) {
+        $query->where('id_danh_muc', $request->id_danh_muc);
+    }
+
+    // Lọc theo thương hiệu (riêng hoặc kết hợp)
+    if ($request->filled('id_thuong_hieu')) {
+        $query->where('id_thuong_hieu', $request->id_thuong_hieu);
+    }
+
+    // Lọc theo trạng thái
+    if ($request->filled('trang_thai')) {
+        $query->where('trang_thai', $request->trang_thai);
+    }
+
+    $products = $query->paginate(15);
+
+    $categories = Category::all();
+    $brands = Brand::all();
+
+    return view('admin.products.index', compact('products','categories','brands'));
+}
+
 
     public function create() {
         $categories = Category::all();

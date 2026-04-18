@@ -10,6 +10,8 @@ use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\DashboardController;
+ use App\Http\Controllers\ReportController;
 
 // Trang chủ
 Route::get('/', function () {
@@ -46,3 +48,17 @@ Route::get('/warehouse/search', [WarehouseController::class, 'search']);
 Route::resource('accounts', AccountController::class)->except(['show']);
 
 Route::resource('orders', OrderController::class);
+
+// Cho Blade
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard.index');
+
+
+
+Route::prefix('reports')->group(function () {
+    Route::get('/', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/doanhthu', [ReportController::class, 'doanhThu'])->name('reports.doanhthu');
+    Route::get('/donhang', [ReportController::class, 'donHang'])->name('reports.donhang');
+    Route::get('/tonkho', [ReportController::class, 'tonKho'])->name('reports.tonkho');
+    Route::get('/banchay', [ReportController::class, 'banChay'])->name('reports.banchay');
+});

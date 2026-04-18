@@ -61,7 +61,7 @@
             <a href="{{ route('receipts.index') }}" class="nav-link text-white"><i class="fa fa-clipboard-list me-2"></i>Phiếu nhập</a>
             <a href="{{ route('warehouse.index') }}" class="nav-link text-white"><i class="fa fa-warehouse me-2"></i>Tồn kho</a>
             <a href="{{ route('orders.index') }}" class="nav-link text-white"><i class="fa fa-shopping-cart me-2"></i>Đơn hàng</a>
-            <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-chart-bar me-2"></i>Báo cáo</a>
+            <a href="{{ route('reports.index') }}" class="nav-link text-white"><i class="fa fa-chart-bar me-2"></i>Báo cáo</a>
         </nav>
         <div class="p-3 border-top text-center">
             <small class="text-muted">© 2025 MyCompany</small>

@@ -6,10 +6,25 @@ use Illuminate\Http\Request;
 
 class WarehouseController extends Controller
 {
-    public function index() {
-        $items = WarehouseItem::with('product')->get();
-        return view('admin.warehouse.index', compact('items'));
+    public function index(Request $request)
+{
+    $query = WarehouseItem::with('product');
+
+    // Nếu có từ khóa tìm kiếm
+    if ($request->filled('keyword')) {
+        $kw = $request->keyword;
+        $query->whereHas('product', function($q) use ($kw) {
+            $q->where('ten_san_pham','like','%'.$kw.'%')
+              ->orWhere('id_san_pham','like','%'.$kw.'%');
+        });
     }
+
+    // Phân trang
+    $items = $query->paginate(15);
+
+    return view('admin.warehouse.index', compact('items'));
+}
+
 
     public function store(Request $request) {
         // Khi thêm sản phẩm mới, tạo luôn bản ghi kho
