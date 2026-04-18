@@ -111,7 +111,7 @@
         </div>
 
         <nav class="nav flex-column px-2 py-3 flex-grow-1">
-<<<<<<< HEAD
+
             <a href="{{ route('admin.dashboard') }}" class="nav-link text-white"><i class="fa fa-home me-2"></i>Trang chủ</a>
             <a href="{{ route('accounts.index') }}" class="nav-link text-white"><i class="fa fa-users me-2"></i>Tài khoản</a>
             <a href="{{ route('categories.index') }}" class="nav-link text-white"><i class="fa fa-tags me-2"></i>Danh mục</a>
@@ -122,7 +122,6 @@
             <a href="{{ route('warehouse.index') }}" class="nav-link text-white"><i class="fa fa-warehouse me-2"></i>Tồn kho</a>
             <a href="{{ route('orders.index') }}" class="nav-link text-white"><i class="fa fa-shopping-cart me-2"></i>Đơn hàng</a>
             <a href="{{ route('reports.index') }}" class="nav-link text-white"><i class="fa fa-chart-bar me-2"></i>Báo cáo</a>
-=======
 
             <a href="{{ route('admin.dashboard') }}"
                class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -178,7 +177,6 @@
                 <span class="label">Đơn hàng</span>
             </a>
 
->>>>>>> 4da78598506ce60f280ec74e0fd51323d061f9ad
         </nav>
 
         <div class="p-3 border-top text-center">
