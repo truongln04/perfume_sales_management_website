@@ -10,7 +10,7 @@
         <h5 class="m-0 text-primary fw-bold">Quản lý kho</h5>
 
         {{-- Ô tìm kiếm --}}
-        <form method="GET" action="{{ route('warehouse.index') }}" class="d-flex gap-2">
+        <form method="GET" action="{{ route('admin.warehouse.index') }}" class="d-flex gap-2">
             <input type="text"
                    name="keyword"
                    class="form-control"

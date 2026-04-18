@@ -53,8 +53,8 @@
                         <td>{{ $s->email }}</td>
                         <td>{{ $s->ghi_chu }}</td>
                         <td class="text-center">
-                            <a href="{{ route('suppliers.edit',$s) }}" class="btn btn-sm btn-warning">Sửa</a>
-                            <form action="{{ route('suppliers.destroy',$s) }}" method="POST" class="d-inline"
+                            <a href="{{ route('admin.suppliers.edit',$s) }}" class="btn btn-sm btn-warning">Sửa</a>
+                            <form action="{{ route('admin.suppliers.destroy',$s) }}" method="POST" class="d-inline"
                                   onsubmit="return confirm('Xóa nhà cung cấp này?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Xóa</button>

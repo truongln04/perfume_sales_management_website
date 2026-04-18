@@ -11,12 +11,12 @@
         <h5 class="m-0 text-primary fw-bold">Quản lý phiếu nhập</h5>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('receipts.create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.receipts.create') }}" class="btn btn-primary">
                 Thêm mới
             </a>
 
             {{-- Ô tìm kiếm (không có nút) --}}
-            <form method="GET" action="{{ route('receipts.index') }}">
+            <form method="GET" action="{{ route('admin.receipts.index') }}">
                 <input type="text"
                        name="search"
                        class="form-control"
@@ -50,8 +50,8 @@
                     <td>{{ number_format($r->tong_tien,0,',','.') }} đ</td>
                     <td>{{ $r->ghi_chu ?? 'Không có ghi chú' }}</td>
                     <td>
-                        <a href="{{ route('receipts.show',$r) }}" class="btn btn-sm btn-info">Xem</a>
-                        <form action="{{ route('receipts.destroy',$r) }}" method="POST" class="d-inline"
+                        <a href="{{ route('admin.receipts.show',$r) }}" class="btn btn-sm btn-info">Xem</a>
+                        <form action="{{ route('admin.receipts.destroy',$r) }}" method="POST" class="d-inline"
                               onsubmit="return confirm('Xóa phiếu nhập này?')">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">Xóa</button>

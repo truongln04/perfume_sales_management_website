@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <form action="{{ route('products.update',$product) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.products.update',$product) }}" method="POST" enctype="multipart/form-data">
         @csrf @method('PUT')
 
         <div class="mb-3">
@@ -92,7 +92,7 @@
         </div>
 
         <button class="btn btn-success">Cập nhật</button>
-        <a href="{{ route('products.index') }}" class="btn btn-secondary">Hủy</a>
+        <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
 @endsection

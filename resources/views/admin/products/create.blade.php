@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">@csrf
+    <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">@csrf
         <div class="mb-3">
             <label>Danh mục</label>
             <select name="id_danh_muc" class="form-select" required>
@@ -50,7 +50,7 @@
             </select>
         </div>
         <button class="btn btn-success">Lưu</button>
-        <a href="{{ route('products.index') }}" class="btn btn-secondary">Hủy</a>
+        <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
 @endsection

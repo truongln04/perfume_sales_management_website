@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <form action="{{ route('receipts.store') }}" method="POST">@csrf
+    <form action="{{ route('admin.receipts.store') }}" method="POST">@csrf
         <div class="mb-3">
             <label>Nhà cung cấp</label>
             <select name="id_ncc" id="supplierSelect" class="form-select" required>
@@ -39,7 +39,7 @@
 
         <div class="mt-3">
             <button class="btn btn-primary">Lưu phiếu nhập</button>
-            <a href="{{ route('receipts.index') }}" class="btn btn-secondary">Hủy</a>
+            <a href="{{ route('admin.receipts.index') }}" class="btn btn-secondary">Hủy</a>
         </div>
     </form>
 </div>

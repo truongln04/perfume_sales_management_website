@@ -8,12 +8,12 @@
     {{-- Header --}}
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="m-0 text-primary fw-bold">Quản lý sản phẩm</h5>
-        <a href="{{ route('products.create') }}" class="btn btn-primary">Thêm mới</a>
+        <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Thêm mới</a>
     </div>
 
     {{-- Form lọc nâng cao --}}
     <div class="card-body border-bottom">
-        <form action="{{ route('products.index') }}" method="GET" class="row g-2">
+        <form action="{{ route('admin.products.index') }}" method="GET" class="row g-2">
             <div class="col-md-3">
                 <input type="text" name="keyword" value="{{ request('keyword') }}"
                        class="form-control" placeholder="Tên hoặc mã SP...">
@@ -112,8 +112,8 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('products.edit',$p) }}" class="btn btn-sm btn-warning">Sửa</a>
-                                <form action="{{ route('products.destroy',$p) }}" method="POST" class="d-inline"
+                                <a href="{{ route('admin.products.edit',$p) }}" class="btn btn-sm btn-warning">Sửa</a>
+                                <form action="{{ route('admin.products.destroy',$p) }}" method="POST" class="d-inline"
                                       onsubmit="return confirm('Xóa sản phẩm này?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">Xóa</button>

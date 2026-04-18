@@ -3,7 +3,7 @@
 <div class="card">
  <div class="card-header"><h5>Cập nhật đơn hàng #{{ $order->id_don_hang }}</h5></div>
  <div class="card-body">
-  <form method="POST" action="{{ route('orders.update', $order) }}">
+  <form method="POST" action="{{ route('admin.orders.update', $order) }}">
    @csrf @method('PUT')
 
    {{-- Trạng thái đơn hàng --}}
@@ -76,7 +76,7 @@
    </div>
 
    <button class="btn btn-primary">Lưu thay đổi</button>
-   <a href="{{ route('orders.index') }}" class="btn btn-secondary">Hủy</a>
+   <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary">Hủy</a>
   </form>
  </div>
 </div>

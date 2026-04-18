@@ -36,7 +36,9 @@ Route::prefix('admin')
     ->as('admin.')
     ->group(function () {
         // Dashboard
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
 
         // Products
         Route::resource('products', ProductController::class);
@@ -76,7 +78,7 @@ Route::prefix('admin')
     });
 
 /* CLIENT */
-Route::prefix('client')->group(function () {
+// Route::prefix('client')->group(function () {
     Route::get('/', [ClientController::class, 'home'])->name('client.home');
     Route::get('/products', [ClientController::class, 'products'])->name('client.products');
     Route::get('/product/{id}', [ClientController::class, 'product'])->name('client.product');
@@ -84,4 +86,4 @@ Route::prefix('client')->group(function () {
     Route::get('/cart', [ClientController::class, 'cart'])->name('client.cart');
     Route::get('/orderslist', [ClientController::class, 'orderslist'])->name('client.orderslist');
     Route::get('/profile', [ClientController::class, 'profile'])->name('client.profile');
-});
+// });
