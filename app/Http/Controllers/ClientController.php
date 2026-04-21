@@ -211,4 +211,28 @@ public function checkoutPage()
         $categories = Category::all();
         return view('client.profile', compact('categories'));
     }
+
+    public function updateProfile(Request $request)
+{
+    $user = auth()->user();
+
+    $data = $request->validate([
+        'name'     => 'required|string|max:255',
+        'email'    => 'required|email|unique:users,email,'.$user->id,
+        'phone'    => 'nullable|string|max:20',
+        'address'  => 'nullable|string|max:255',
+        'password' => 'nullable|string|min:6',
+    ]);
+
+    if(!empty($data['password'])) {
+        $data['password'] = bcrypt($data['password']);
+    } else {
+        unset($data['password']);
+    }
+
+    $user->update($data);
+
+    return back()->with('success','Cập nhật thông tin thành công');
+}
+
 }

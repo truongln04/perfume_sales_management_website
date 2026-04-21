@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $donHangMoi = Order::where('trang_thai', 'moi')->count();
         $doanhThu   = Order::where('trang_thai', 'hoan_thanh')->sum('tong_tien');
 
-        return view('admin.dashboard.index', compact(
+        return view('admin.dashboard.doanhthu', compact(
             'taiKhoan','sanPham','donHangMoi','doanhThu'
         ));
     }

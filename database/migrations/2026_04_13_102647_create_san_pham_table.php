@@ -23,7 +23,8 @@ return new class extends Migration
     $table->decimal('gia_ban', 12, 0)->default(0);
     $table->decimal('km_phan_tram', 5, 2)->default(0);
     // $table->integer('so_luong_ton')->default(0);
-    $table->boolean('trang_thai')->default(1);
+    // $table->boolean('trang_thai')->default(1);
+    $table->tinyInteger('trang_thai')->unsigned()->default(1);
     $table->timestamp('ngay_tao')->useCurrent();
 
     $table->foreign('id_danh_muc')->references('id_danh_muc')->on('danh_muc')->nullOnDelete();

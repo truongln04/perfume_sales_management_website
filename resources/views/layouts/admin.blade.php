@@ -79,7 +79,7 @@
             <a href="{{ route('admin.receipts.index') }}" class="nav-link"><i class="fa fa-clipboard-list me-2"></i><span class="label">Phiếu nhập</span></a>
             <a href="{{ route('admin.warehouse.index') }}" class="nav-link"><i class="fa fa-warehouse me-2"></i><span class="label">Tồn kho</span></a>
             <a href="{{ route('admin.orders.index') }}" class="nav-link"><i class="fa fa-shopping-cart me-2"></i><span class="label">Đơn hàng</span></a>
-            <a href="{{ route('admin.reports.index') }}" class="nav-link"><i class="fa fa-chart-bar me-2"></i><span class="label">Báo cáo</span></a>
+            <a href="{{ route('admin.reports.doanhthu') }}" class="nav-link"><i class="fa fa-chart-bar me-2"></i><span class="label">Báo cáo</span></a>
         </nav>
 
         <div class="p-3 border-top text-center">

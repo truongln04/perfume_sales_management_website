@@ -20,7 +20,7 @@ class CategoryController extends Controller {
             'mo_ta' => 'nullable|string',
         ]);
         Category::create($validated);
-        return redirect()->route('categories.index')->with('success', 'Thêm danh mục thành công!');
+        return redirect()->route('admin.categories.index')->with('success', 'Thêm danh mục thành công!');
     }
 
     public function edit($id) {

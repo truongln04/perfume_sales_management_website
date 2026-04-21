@@ -75,7 +75,7 @@ class ProductController extends Controller
     
     Product::create($data);
 
-    return redirect()->route('products.index')->with('success','Thêm sản phẩm thành công');
+    return redirect()->route('admin.products.index')->with('success','Thêm sản phẩm thành công');
 }
 
 
@@ -119,12 +119,12 @@ class ProductController extends Controller
 
         $product->save();
 
-        return redirect()->route('products.index')->with('success','Cập nhật sản phẩm thành công');
+        return redirect()->route('admin.products.index')->with('success','Cập nhật sản phẩm thành công');
     }
 
     public function destroy(Product $product) {
         $product->delete();
-        return redirect()->route('products.index')->with('success','Xóa sản phẩm thành công');
+        return redirect()->route('admin.products.index')->with('success','Xóa sản phẩm thành công');
     }
 
     

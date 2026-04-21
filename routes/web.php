@@ -125,3 +125,4 @@ Route::get('/checkout', [ClientController::class,'checkoutPage'])->name('client.
 Route::post('/orders/checkout', [ClientController::class,'checkout'])->name('client.orders.checkout');
 
 
+Route::put('/profile', [ClientController::class,'updateProfile'])->name('client.profile.update');
