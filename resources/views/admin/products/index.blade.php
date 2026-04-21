@@ -97,7 +97,7 @@
                             <td style="max-width:200px">{{ Str::limit($p->mo_ta,60) }}</td>
                             <td>{{ $p->gia_nhap ? number_format($p->gia_nhap,0,',','.') . ' đ' : '—' }}</td>
                             <td>{{ $p->gia_ban ? number_format($p->gia_ban,0,',','.') . ' đ' : '—' }}</td>
-                            <td>{{ $p->km_phan_tram ? $p->km_phan_tram.'%' : '—' }}</td>
+                           <td>{{ $p->km_phan_tram ? (int)$p->km_phan_tram.'%' : '—' }}</td>
                             <td>
                                 @if($p->gia_ban && $p->km_phan_tram)
                                     {{ number_format($p->gia_ban * (1 - $p->km_phan_tram/100),0,',','.') }} đ

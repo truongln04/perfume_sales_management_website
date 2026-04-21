@@ -23,6 +23,10 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class, 'id_don_hang', 'id_don_hang');
     }
 
+public function details()
+{
+    return $this->hasMany(OrderDetail::class, 'id_don_hang', 'id_don_hang');
+}
 
     protected $fillable = [
         'id_tai_khoan',

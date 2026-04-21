@@ -10,12 +10,12 @@
         <h5 class="m-0 text-primary fw-bold">Quản lý nhà cung cấp</h5>
 
         <div class="d-flex gap-2">
-            <a href="{{ route('suppliers.create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.suppliers.create') }}" class="btn btn-primary">
                 Thêm mới
             </a>
 
             {{-- Ô tìm kiếm --}}
-            <form method="GET" action="{{ route('suppliers.index') }}">
+            <form method="GET" action="{{ route('admin.suppliers.index') }}">
                 <input type="text"
                        name="keyword"
                        class="form-control"

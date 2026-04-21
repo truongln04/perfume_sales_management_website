@@ -34,7 +34,16 @@ class OrderDetail extends Model
     {
         return $this->belongsTo(Product::class, 'id_san_pham', 'id_san_pham');
     }
+    
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'id_san_pham', 'id_san_pham');
+    }
 
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'id_don_hang', 'id_don_hang');
+    }
     public function getThanhTienAttribute()
     {
         return $this->so_luong * $this->don_gia;

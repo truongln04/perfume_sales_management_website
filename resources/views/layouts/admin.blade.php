@@ -92,13 +92,13 @@
          class="main-content flex-grow-1"
          style="margin-left:240px; width:100%; min-height:calc(100vh - 56px); background:#f8f9fa;">
 
-        {{-- <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
+        <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
             <h5 class="mb-0 fw-bold">@yield('header', 'Trang quản trị')</h5>
-            <div class="d-flex align-items-center gap-2">
+            {{-- <div class="d-flex align-items-center gap-2">
                 <span>{{ Auth::user()->ten_hien_thi ?? 'Admin' }}</span>
                 <img src="{{ asset('images/admin-avatar.png') }}" alt="Avatar" class="rounded-circle" width="40" height="40">
-            </div>
-        </header> --}}
+            </div> --}}
+        </header>
 
         <main class="p-4">
             @if(session('success'))

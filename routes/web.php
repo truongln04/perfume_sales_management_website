@@ -102,6 +102,26 @@ Route::prefix('admin')
     Route::get('/product/{id}', [ClientController::class, 'product'])->name('client.product');
     Route::get('/category/{id}', [ClientController::class, 'category'])->name('client.category');
     Route::get('/cart', [ClientController::class, 'cart'])->name('client.cart');
+    Route::post('/cart/add/{id}', [ClientController::class, 'addToCart'])->name('client.cart.add');
     Route::get('/orderslist', [ClientController::class, 'orderslist'])->name('client.orderslist');
+    Route::get('/orders/{id}', [ClientController::class, 'orderShow'])->name('client.orders.show');   // thêm route này
+    Route::put('/orders/{id}/cancel', [ClientController::class, 'orderCancel'])->name('client.orders.cancel'); // thêm route này
     Route::get('/profile', [ClientController::class, 'profile'])->name('client.profile');
 //});
+
+Route::prefix('/cart')->group(function () {
+    Route::get('/', [ClientController::class,'cart'])->name('client.cart');
+    Route::post('/add/{id}', [ClientController::class,'addToCart'])->name('client.cart.add');
+    Route::put('/{id}', [ClientController::class,'updateCart'])->name('client.cart.update');
+    Route::delete('/', [ClientController::class,'removeFromCart'])->name('client.cart.remove'); // xoá nhiều
+    Route::delete('/{id}', [ClientController::class,'removeOne'])->name('client.cart.removeOne'); // xoá 1
+    Route::post('/clear', [ClientController::class,'clearCart'])->name('client.cart.clear');
+});
+
+Route::prefix('/orders')->group(function () {
+    Route::post('/checkout', [ClientController::class,'checkout'])->name('client.orders.checkout');
+});
+Route::get('/checkout', [ClientController::class,'checkoutPage'])->name('client.checkout');
+Route::post('/orders/checkout', [ClientController::class,'checkout'])->name('client.orders.checkout');
+
+

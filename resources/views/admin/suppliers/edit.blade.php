@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <form action="{{ route('suppliers.update',$supplier) }}" method="POST">@csrf @method('PUT')
+    <form action="{{ route('admin.suppliers.update',$supplier) }}" method="POST">@csrf @method('PUT')
         <div class="mb-3">
             <label>Tên nhà cung cấp</label>
             <input name="ten_ncc" class="form-control" value="{{ $supplier->ten_ncc }}" required>
@@ -26,7 +26,7 @@
             <textarea name="ghi_chu" class="form-control">{{ $supplier->ghi_chu }}</textarea>
         </div>
         <button class="btn btn-success">Cập nhật</button>
-        <a href="{{ route('suppliers.index') }}" class="btn btn-secondary">Hủy</a>
+        <a href="{{ route('admin.suppliers.index') }}" class="btn btn-secondary">Hủy</a>
     </form>
 </div>
 @endsection

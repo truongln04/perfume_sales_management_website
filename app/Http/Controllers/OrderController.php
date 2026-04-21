@@ -67,4 +67,5 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index')->with('success', 'Xóa đơn hàng thành công');
     }
+    
 }
