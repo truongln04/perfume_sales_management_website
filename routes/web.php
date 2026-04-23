@@ -50,48 +50,52 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 
 /* ADMIN */
 Route::prefix('admin')
-    ->middleware(['auth', 'admin'])
+    ->middleware(['auth', 'admin:admin,nhanvien'])
     ->as('admin.')
     ->group(function () {
-        // Dashboard
-       Route::get('/dashboard', function () {
+
+        // Dashboard (ADMIN + NHANVIEN)
+        Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
 
-        // Products
+        /*
+        |--------------------------------------------------------------------------
+        | ADMIN + NHANVIEN
+        |--------------------------------------------------------------------------
+        */
         Route::resource('products', ProductController::class);
-
-        // Categories
-        Route::resource('categories', CategoryController::class);
-
-        // Suppliers
         Route::resource('suppliers', SupplierController::class);
+        Route::resource('receipts', ReceiptController::class);
+        Route::resource('warehouse', WarehouseController::class);
+        Route::resource('orders', OrderController::class);
+
+        Route::get('/warehouse/search', [WarehouseController::class, 'search'])
+            ->name('warehouse.search');
+
         Route::get('/suppliers/{id}/products', [SupplierController::class, 'getProducts'])
             ->name('suppliers.products');
 
-        // Brands
-        Route::resource('brands', BrandController::class);
+        /*
+        |--------------------------------------------------------------------------
+        | CHỈ ADMIN
+        |--------------------------------------------------------------------------
+        */
+        Route::middleware('admin:admin')->group(function () {
 
-        // Receipts
-        Route::resource('receipts', ReceiptController::class);
+            Route::resource('accounts', AccountController::class)->except(['show']);
 
-        // Warehouse
-        Route::resource('warehouse', WarehouseController::class);
-        Route::get('/warehouse/search', [WarehouseController::class, 'search'])->name('warehouse.search');
+            Route::resource('categories', CategoryController::class);
 
-        // Accounts
-        Route::resource('accounts', AccountController::class)->except(['show']);
+            Route::resource('brands', BrandController::class);
 
-        // Orders
-        Route::resource('orders', OrderController::class);
-
-        // Reports
-        Route::prefix('reports')->group(function () {
-            Route::get('/', [ReportController::class, 'index'])->name('reports.index');
-            Route::get('/doanhthu', [ReportController::class, 'doanhThu'])->name('reports.doanhthu');
-            Route::get('/donhang', [ReportController::class, 'donHang'])->name('reports.donhang');
-            Route::get('/tonkho', [ReportController::class, 'tonKho'])->name('reports.tonkho');
-            Route::get('/banchay', [ReportController::class, 'banChay'])->name('reports.banchay');
+            Route::prefix('reports')->group(function () {
+                Route::get('/', [ReportController::class, 'index'])->name('reports.index');
+                Route::get('/doanhthu', [ReportController::class, 'doanhThu'])->name('reports.doanhthu');
+                Route::get('/donhang', [ReportController::class, 'donHang'])->name('reports.donhang');
+                Route::get('/tonkho', [ReportController::class, 'tonKho'])->name('reports.tonkho');
+                Route::get('/banchay', [ReportController::class, 'banChay'])->name('reports.banchay');
+            });
         });
     });
 
