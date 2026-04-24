@@ -36,7 +36,7 @@ class SupplierController extends Controller
             'email'=>'required|email|unique:nha_cung_cap,email',
         ]);
         Supplier::create($request->all());
-        return redirect()->route('suppliers.index')->with('success','Thêm nhà cung cấp thành công');
+        return redirect()->route('admin.suppliers.index')->with('success','Thêm nhà cung cấp thành công');
     }
 
     public function edit(Supplier $supplier) {
@@ -51,7 +51,7 @@ class SupplierController extends Controller
             'email'=>'required|email|unique:nha_cung_cap,email,'.$supplier->id_ncc.',id_ncc',
         ]);
         $supplier->update($request->all());
-        return redirect()->route('suppliers.index')->with('success','Cập nhật thành công');
+        return redirect()->route('admin.suppliers.index')->with('success','Cập nhật thành công');
     }
 
     public function destroy(Supplier $supplier) {
@@ -59,9 +59,12 @@ class SupplierController extends Controller
         return redirect()->route('admin.suppliers.index')->with('success','Xóa thành công');
     }
 
-    public function getProducts($id) {
-    $products = Product::where('id_ncc', $id)->get();
+    public function getProducts($id)
+{
+    $products = Product::where('id_ncc', $id)
+        ->get(['id_san_pham','ten_san_pham']);
     return response()->json($products);
 }
+
 
 }

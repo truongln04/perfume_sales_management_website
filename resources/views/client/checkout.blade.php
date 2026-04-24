@@ -23,12 +23,12 @@
         @endif
 
         {{-- FORM --}}
-        <form action="{{ route('client.orders.checkout') }}" method="POST">
+        <form action="{{ route('client.orders.checkout') }}" method="POST" class="row">
             @csrf
 
-            {{-- LEFT --}}
-            <div class="col-lg-6 mb-4">
-                <div class="card shadow-sm border-0">
+            {{-- LEFT: thông tin giao hàng --}}
+            <div class="col-lg-6 mb-4 order-lg-1">
+                <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
                         <h4 class="fw-bold mb-4">Thông tin giao hàng</h4>
 
@@ -55,9 +55,9 @@
                 </div>
             </div>
 
-            {{-- RIGHT --}}
-            <div class="col-lg-6">
-                <div class="card shadow-sm border-0">
+            {{-- RIGHT: đơn hàng + thanh toán --}}
+            <div class="col-lg-6 order-lg-2">
+                <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
                         <h4 class="fw-bold mb-4">Đơn hàng</h4>
 
@@ -92,21 +92,12 @@
                             <h5>Thanh toán</h5>
 
                             <div class="form-check">
-                                <input class="form-check-input"
-                                       type="radio"
-                                       name="phuongThucTT"
-                                       value="COD"
-                                       checked>
-                                <label class="form-check-label">
-                                    COD
-                                </label>
+                                <input class="form-check-input" type="radio" name="phuongThucTT" value="COD" checked>
+                                <label class="form-check-label">COD</label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input"
-                                       type="radio"
-                                       name="phuongThucTT"
-                                       value="ONLINE">
+                                <input class="form-check-input" type="radio" name="phuongThucTT" value="ONLINE">
                                 <label class="form-check-label">
                                     <img src="https://developers.momo.vn/v3/vi/img/logo.svg" width="40">
                                     MoMo
@@ -117,11 +108,9 @@
                         <button class="btn btn-warning w-100 mt-4 fw-bold">
                             ĐẶT HÀNG
                         </button>
-
                     </div>
                 </div>
             </div>
-
         </form>
 
     </div>

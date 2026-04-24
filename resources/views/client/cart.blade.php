@@ -56,10 +56,6 @@
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <h4 class="mb-0">
-                    Tổng tiền: <span class="text-danger fw-bold">{{ number_format($totalPrice,0,',','.') }} ₫</span>
-                </h4>
-                <div class="d-flex justify-content-between align-items-center mt-4">
                     <h4 class="mb-0">
                         Tổng tiền: <span class="text-danger fw-bold">{{ number_format($totalPrice,0,',','.') }} ₫</span>
                     </h4>

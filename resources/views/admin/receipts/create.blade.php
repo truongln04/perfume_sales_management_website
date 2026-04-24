@@ -31,8 +31,12 @@
                         <option value="">-- Chọn sản phẩm --</option>
                     </select>
                 </div>
-                <div class="col-md-2"><input type="number" name="details[0][so_luong]" class="form-control" placeholder="Số lượng"></div>
-                <div class="col-md-2"><input type="number" name="details[0][don_gia]" class="form-control" placeholder="Đơn giá"></div>
+                <div class="col-md-2">
+                    <input type="number" name="details[0][so_luong]" class="form-control" placeholder="Số lượng">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="details[0][don_gia]" class="form-control" placeholder="Đơn giá">
+                </div>
             </div>
         </div>
         <button type="button" class="btn btn-sm btn-outline-success" onclick="addDetail()">+ Thêm dòng</button>
@@ -47,11 +51,12 @@
 <script>
 let detailIndex = 1;
 
+// Khi chọn nhà cung cấp, load sản phẩm cho dòng đầu tiên
 document.getElementById('supplierSelect').addEventListener('change', function() {
     const supplierId = this.value;
     if (!supplierId) return;
 
-    fetch(`/suppliers/${supplierId}/products`)
+    fetch(`/admin/suppliers/${supplierId}/products`)
         .then(res => res.json())
         .then(products => {
             const select = document.getElementById('productSelect0');
@@ -72,16 +77,20 @@ function addDetail(){
     const html = `
     <div class="row mb-2">
         <div class="col-md-4">
-            <select name="details[${detailIndex}][idSanPham]" id="productSelect${detailIndex}" class="form-select" required>
+            <select name="details[${detailIndex}][id_san_pham]" id="productSelect${detailIndex}" class="form-select" required>
                 <option value="">-- Chọn sản phẩm --</option>
             </select>
         </div>
-        <div class="col-md-2"><input type="number" name="details[${detailIndex}][soLuong]" class="form-control" placeholder="Số lượng"></div>
-        <div class="col-md-2"><input type="number" name="details[${detailIndex}][donGia]" class="form-control" placeholder="Đơn giá"></div>
+        <div class="col-md-2">
+            <input type="number" name="details[${detailIndex}][so_luong]" class="form-control" placeholder="Số lượng">
+        </div>
+        <div class="col-md-2">
+            <input type="number" name="details[${detailIndex}][don_gia]" class="form-control" placeholder="Đơn giá">
+        </div>
     </div>`;
     document.getElementById('details').insertAdjacentHTML('beforeend', html);
 
-    fetch(`/suppliers/${supplierId}/products`)
+    fetch(`/admin/suppliers/${supplierId}/products`)
         .then(res => res.json())
         .then(products => {
             const select = document.getElementById(`productSelect${detailIndex}`);

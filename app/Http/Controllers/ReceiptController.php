@@ -49,17 +49,26 @@ class ReceiptController extends Controller
 
         $tong = 0;
         foreach($request->details as $d){
-            $ct = new ReceiptDetail([
-                'id_san_pham'=>$d['id_san_pham'],
-                'so_luong'=>$d['so_luong'],
-                'don_gia'=>$d['don_gia']
-            ]);
-            $receipt->chiTiet()->save($ct);
-            $tong += $d['so_luong'] * $d['don_gia'];
-        }
+    $ct = new ReceiptDetail([
+        'id_san_pham'=>$d['id_san_pham'],
+        'so_luong'=>$d['so_luong'],
+        'don_gia'=>$d['don_gia']
+    ]);
+    $receipt->receiptDetails()->save($ct);
+
+    // Cộng dồn vào kho
+    $warehouseItem = \App\Models\WarehouseItem::where('id_san_pham', $d['id_san_pham'])->first();
+    if ($warehouseItem) {
+        $warehouseItem->so_luong_nhap += $d['so_luong'];
+        $warehouseItem->save();
+    }
+
+    $tong += $d['so_luong'] * $d['don_gia'];
+}
+
         $receipt->update(['tong_tien'=>$tong]);
 
-        return redirect()->route('receipts.index')->with('success','Thêm phiếu nhập thành công');
+        return redirect()->route('admin.receipts.index')->with('success','Thêm phiếu nhập thành công');
     }
 
    public function show(Receipt $receipt) {
@@ -67,9 +76,27 @@ class ReceiptController extends Controller
     return view('admin.receipts.show', compact('receipt'));
 
 }
-
-    public function destroy(Receipt $receipt) {
-        $receipt->delete();
-        return redirect()->route('receipts.index')->with('success','Xóa phiếu nhập thành công');
+public function destroy(Receipt $receipt) {
+    // Lấy tất cả chi tiết phiếu nhập
+    foreach ($receipt->receiptDetails as $detail) {
+        $warehouseItem = \App\Models\WarehouseItem::where('id_san_pham', $detail->id_san_pham)->first();
+        if ($warehouseItem) {
+            // Trừ số lượng nhập và tồn kho
+            $warehouseItem->so_luong_nhap -= $detail->so_luong;
+   
+            if ($warehouseItem->so_luong_nhap < 0) $warehouseItem->so_luong_nhap = 0;
+            $warehouseItem->save();
+        }
     }
+
+    // Xóa chi tiết phiếu nhập
+    $receipt->receiptDetails()->delete();
+
+    // Xóa phiếu nhập
+    $receipt->delete();
+
+    return redirect()->route('admin.receipts.index')->with('success','Xóa phiếu nhập thành công');
+}
+
+
 }

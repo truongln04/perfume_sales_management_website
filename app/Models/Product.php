@@ -19,6 +19,7 @@ class Product extends Model
         'hinh_anh',
         'id_danh_muc',
         'id_thuong_hieu',
+        'id_ncc',
         'gia_nhap',
         'gia_ban',
         'km_phan_tram',
@@ -48,9 +49,9 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'id_thuong_hieu');
     }
 
-    public function receipt() {
-        return $this->belongsTo(Receipt::class, 'id_phieu_nhap');
-    }
+    // public function receipt() {
+    //     return $this->belongsTo(Receipt::class, 'id_phieu_nhap');
+    // }
 
     public function supplier() {
         return $this->belongsTo(Supplier::class, 'id_ncc', 'id_ncc');
