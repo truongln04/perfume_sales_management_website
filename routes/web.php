@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\AdminController;
 
 // Trang chủ
 Route::get('/', function () {
@@ -58,6 +59,11 @@ Route::prefix('admin')
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('dashboard');
+
+        // PROFILE ADMIN + NHANVIEN
+Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
+Route::get('/profile/edit', [AdminController::class, 'editProfile'])->name('profile.edit');
+Route::put('/profile/update', [AdminController::class, 'updateProfile'])->name('profile.update');
 
         /*
         |--------------------------------------------------------------------------
@@ -122,11 +128,19 @@ Route::prefix('/cart')->group(function () {
     Route::post('/clear', [ClientController::class,'clearCart'])->name('client.cart.clear');
 });
 
+// CHECKOUT PAGE
+Route::get('/checkout', [ClientController::class,'checkoutPage'])
+    ->name('client.checkout');
+
+// XỬ LÝ ĐẶT HÀNG + MOMO
 Route::prefix('/orders')->group(function () {
-    Route::post('/checkout', [ClientController::class,'checkout'])->name('client.orders.checkout');
+    Route::post('/checkout', [OrderController::class, 'checkout'])
+        ->name('client.orders.checkout');
 });
-Route::get('/checkout', [ClientController::class,'checkoutPage'])->name('client.checkout');
-Route::post('/orders/checkout', [ClientController::class,'checkout'])->name('client.orders.checkout');
+
+// MOMO RETURN
+Route::get('/momo-return', [OrderController::class, 'momoReturn'])
+    ->name('momo.return');
 
 
 Route::put('/profile', [ClientController::class,'updateProfile'])->name('client.profile.update');

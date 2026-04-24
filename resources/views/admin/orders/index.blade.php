@@ -15,12 +15,6 @@
         </form>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success m-2">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="card-body p-0">
         <table class="table table-hover table-striped m-0">
             <thead class="table-light">

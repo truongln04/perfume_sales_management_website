@@ -9,8 +9,20 @@
     <p><strong>SĐT:</strong> {{ $order->sdt_nhan }}</p>
     <p><strong>Địa chỉ:</strong> {{ $order->dia_chi_giao }}</p>
     <p><strong>Ngày đặt:</strong> {{ \Carbon\Carbon::parse($order->ngay_dat)->format('d/m/Y H:i') }}</p>
-    <p><strong>Trạng thái ĐH:</strong> {{ $order->trang_thai }}</p>
-    <p><strong>Trạng thái TT:</strong> {{ $order->trang_thai_tt }}</p>
+    <p>
+                <strong>Trạng thái đơn hàng:</strong>
+                <span class="badge bg-info">
+                    {{ \App\Models\Order::statusLabels()[$order->trang_thai] ?? $order->trang_thai }}
+                </span>
+            </p>
+
+            <p>
+                <strong>Thanh toán:</strong>
+                <span class="badge bg-success">
+                    {{ \App\Models\Order::paymentStatusLabels()[$order->trang_thai_tt] ?? $order->trang_thai_tt }}
+                </span>
+            </p>
+
 
 
     <h5 class="mt-4">Sản phẩm trong đơn</h5>

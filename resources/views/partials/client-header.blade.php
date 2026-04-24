@@ -19,11 +19,16 @@
         <div class="d-flex align-items-center gap-4">
             <a href="{{ route('client.cart') }}" class="text-dark position-relative">
                 <i class="bi bi-cart3 fs-3"></i>
-                @if(session('cart_count',0) > 0)
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                        {{ session('cart_count') }}
-                    </span>
-                @endif
+                @php
+    $cart = session('cart', []);
+    $cartCount = collect($cart)->sum('quantity');
+@endphp
+
+@if($cartCount > 0)
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        {{ $cartCount }}
+    </span>
+@endif
             </a>
 
             @guest

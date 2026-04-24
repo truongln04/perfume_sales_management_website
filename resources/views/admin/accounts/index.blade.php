@@ -45,10 +45,15 @@
 
                     <td>
                         @if($acc->anh_dai_dien)
-                            <img src="{{ $acc->anh_dai_dien }}"
-                                 width="40"
-                                 height="40"
-                                 class="rounded-circle border">
+                            @if(Str::startsWith($acc->anh_dai_dien, ['http://','https://']))
+        <img src="{{ $acc->anh_dai_dien }}"
+             width="40" height="40"
+             class="rounded-circle border">
+    @else
+        <img src="{{ asset('images/' . $acc->anh_dai_dien) }}"
+             width="40" height="40"
+             class="rounded-circle border">
+    @endif
                         @else
                             N/A
                         @endif

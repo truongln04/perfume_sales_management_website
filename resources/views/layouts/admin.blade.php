@@ -31,19 +31,64 @@
 </head>
 <body>
 
-{{-- TOPBAR GHIM --}}
+{{-- TOPBAR --}}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow-sm topbar">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold" href="/">Perfume Shop</a>
-        <div class="ms-auto d-flex align-items-center gap-2">
+
+        <div class="ms-auto d-flex align-items-center gap-3">
             @auth
-                <span class="text-white">Xin chào, {{ Auth::user()->ten_hien_thi }}</span>
-                <form action="{{ route('logout') }}" method="POST" class="m-0">
-                    @csrf
-                    <button class="btn btn-danger btn-sm">
-                        <i class="fa fa-sign-out-alt me-1"></i> Logout
-                    </button>
-                </form>
+                @php
+                    $user = Auth::user();
+                    $avatar = $user->anh_dai_dien;
+                @endphp
+
+                <div class="dropdown">
+                    <a class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                       href="#" role="button" data-bs-toggle="dropdown">
+
+                        {{-- Avatar --}}
+                        @if($avatar && Str::startsWith($avatar, ['http://','https://']))
+                            <img src="{{ $avatar }}"
+                                 class="rounded-circle me-2 border"
+                                 width="40" height="40"
+                                 style="object-fit:cover">
+                        @else
+                            <img src="{{ $avatar ? asset('images/'.$avatar) : 'https://via.placeholder.com/40' }}"
+                                 class="rounded-circle me-2 border"
+                                 width="40" height="40"
+                                 style="object-fit:cover">
+                        @endif
+
+                        {{-- Tên --}}
+                        <span class="fw-semibold">{{ $user->ten_hien_thi }}</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                                <i class="fa fa-user me-2"></i> Hồ sơ cá nhân
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="{{ route('admin.profile.edit') }}">
+                                <i class="fa fa-edit me-2"></i> Chỉnh sửa thông tin
+                            </a>
+                        </li>
+
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button class="dropdown-item text-danger">
+                                    <i class="fa fa-sign-out-alt me-2"></i> Đăng xuất
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             @else
                 <a href="{{ route('login') }}" class="btn btn-primary btn-sm">Login</a>
                 <a href="{{ route('register') }}" class="btn btn-success btn-sm">Register</a>
@@ -87,17 +132,13 @@
         </div>
     </aside>
 
-    {{-- MAIN CONTENT --}}
+    {{-- MAIN --}}
     <div id="mainContent"
          class="main-content flex-grow-1"
          style="margin-left:240px; width:100%; min-height:calc(100vh - 56px); background:#f8f9fa;">
 
         <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
             <h5 class="mb-0 fw-bold">@yield('header', 'Trang quản trị')</h5>
-            {{-- <div class="d-flex align-items-center gap-2">
-                <span>{{ Auth::user()->ten_hien_thi ?? 'Admin' }}</span>
-                <img src="{{ asset('images/admin-avatar.png') }}" alt="Avatar" class="rounded-circle" width="40" height="40">
-            </div> --}}
         </header>
 
         <main class="p-4">
@@ -107,12 +148,14 @@
             @if(session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
+
             @yield('content')
         </main>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
 const toggleBtn = document.getElementById('toggleBtn');
 const sidebar = document.getElementById('sidebar');
@@ -120,6 +163,7 @@ const mainContent = document.getElementById('mainContent');
 
 toggleBtn?.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
+
     if (sidebar.classList.contains('collapsed')) {
         mainContent.style.marginLeft = '60px';
         toggleBtn.innerHTML = '<i class="fa fa-angle-double-right"></i>';
