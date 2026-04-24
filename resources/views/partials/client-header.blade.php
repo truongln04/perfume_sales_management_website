@@ -21,7 +21,7 @@
                 <i class="bi bi-cart3 fs-3"></i>
                 @php
     $cart = session('cart', []);
-    $cartCount = collect($cart)->sum('quantity');
+     $cartCount = count($cart);
 @endphp
 
 @if($cartCount > 0)

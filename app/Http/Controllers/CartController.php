@@ -4,7 +4,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class ClientController extends Controller
+class CartController extends Controller
 {
     /* ===========================
      * Giỏ hàng
