@@ -2,23 +2,21 @@
 @section('title','Giỏ hàng')
 
 @section('content')
+
 <div class="container py-4">
     <h3 class="fw-bold mb-4">Giỏ hàng</h3>
 
-    @php
-        $totalPrice = collect($cartItems)->sum(fn($item) => $item['gia_ban'] * $item['quantity']);
-    @endphp
-
-    @if(empty($cartItems))
+    @if($cartItems->isEmpty())
         <p class="text-muted">Giỏ hàng của bạn đang trống.</p>
     @else
 
-        {{-- TABLE KHÔNG BỌC FORM --}}
         <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th><input type="checkbox" id="select-all"></th>
+                        <th>
+                            <input type="checkbox" id="select-all">
+                        </th>
                         <th>Ảnh</th>
                         <th>Sản phẩm</th>
                         <th class="text-end">Đơn giá</th>
@@ -29,80 +27,98 @@
                 </thead>
 
                 <tbody>
-                    @foreach($cartItems as $id => $item)
+                    @foreach($cartItems as $item)
                         <tr>
-                            {{-- CHECKBOX --}}
+
+                            {{-- Checkbox --}}
                             <td>
-                                <input type="checkbox" class="select-item" value="{{ $id }}">
+                                <input
+                                    type="checkbox"
+                                    class="select-item"
+                                    value="{{ $item->id_gh }}"
+                                    data-price="{{ $item->don_gia * $item->so_luong }}"
+                                >
                             </td>
 
+                            {{-- Ảnh --}}
                             <td>
-                                <img src="{{ $item['hinh_anh'] }}"
-                                     style="width:60px;height:60px;object-fit:cover">
+                                <img
+                                    src="{{ asset($item->product->hinh_anh) }}"
+                                    style="width:60px;height:60px;object-fit:cover"
+                                >
                             </td>
 
-                            <td>{{ $item['ten_san_pham'] }}</td>
+                            {{-- Tên --}}
+                            <td>
+                                {{ $item->product->ten_san_pham }}
+                            </td>
 
+                            {{-- Đơn giá --}}
                             <td class="text-end">
-                                {{ number_format($item['gia_ban'],0,',','.') }} ₫
+                                {{ number_format($item->don_gia, 0, ',', '.') }} ₫
                             </td>
 
-                            {{-- ✅ FORM UPDATE RIÊNG --}}
+                            {{-- Số lượng --}}
                             <td class="text-center">
-                                <form action="{{ url('/cart/'.$id) }}" method="POST" class="d-inline-flex">
+                                <form
+                                    action="{{ route('client.cart.update', $item->id_gh) }}"
+                                    method="POST"
+                                    class="d-inline-flex"
+                                >
                                     @csrf
                                     @method('PUT')
 
-                                    <button type="submit" name="action" value="decrease"
-                                            class="btn btn-outline-secondary btn-sm">-</button>
+                                    <button name="action" value="decrease" class="btn btn-outline-secondary btn-sm">-</button>
 
-                                    <input type="text" readonly
-                                           value="{{ $item['quantity'] }}"
-                                           class="form-control form-control-sm text-center mx-1"
-                                           style="width:50px">
+                                    <input
+                                        type="text"
+                                        readonly
+                                        value="{{ $item->so_luong }}"
+                                        class="form-control form-control-sm text-center mx-1"
+                                        style="width:50px"
+                                    >
 
-                                    <button type="submit" name="action" value="increase"
-                                            class="btn btn-outline-secondary btn-sm">+</button>
+                                    <button name="action" value="increase" class="btn btn-outline-secondary btn-sm">+</button>
                                 </form>
                             </td>
 
+                            {{-- Thành tiền --}}
                             <td class="text-end">
-                                {{ number_format($item['gia_ban'] * $item['quantity'],0,',','.') }} ₫
+                                {{ number_format($item->don_gia * $item->so_luong, 0, ',', '.') }} ₫
                             </td>
 
-                            {{-- ✅ FORM XÓA 1 --}}
+                            {{-- Xóa --}}
                             <td>
-                                <form action="{{ url('/cart/'.$id) }}" method="POST">
+                                <form action="{{ route('client.cart.removeOne', $item->id_gh) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        Xóa
-                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">Xóa</button>
                                 </form>
                             </td>
+
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
 
-        {{-- TỔNG + ACTION --}}
+        {{-- Tổng tiền --}}
         <div class="d-flex justify-content-between align-items-center mt-4">
             <h4 class="mb-0">
                 Tổng tiền:
-                <span class="text-danger fw-bold">
-                    {{ number_format($totalPrice,0,',','.') }} ₫
+                <span id="total-price" class="text-danger fw-bold">
+                    0 ₫
                 </span>
             </h4>
 
             <div class="d-flex align-items-center gap-2">
 
-                {{-- ✅ FORM XÓA NHIỀU --}}
-                <form id="delete-multiple-form" action="{{ route('client.cart.remove') }}" method="POST">
+                {{-- Form xóa nhiều --}}
+                <form id="delete-multiple-form"
+                      action="{{ route('client.cart.remove') }}"
+                      method="POST">
                     @csrf
                     @method('DELETE')
-
-                    {{-- hidden inputs sẽ được thêm bằng JS --}}
                 </form>
 
                 <button onclick="deleteSelected()"
@@ -114,31 +130,52 @@
                    class="btn btn-primary btn-sm px-3 fw-bold rounded-pill shadow-sm">
                     🛒 Thanh toán
                 </a>
+
             </div>
         </div>
 
     @endif
 </div>
 
-{{-- SCRIPT --}}
 <script>
-document.getElementById('select-all')?.addEventListener('change', e => {
-    document.querySelectorAll('.select-item')
-        .forEach(cb => cb.checked = e.target.checked);
+function formatVND(number) {
+    return number.toLocaleString('vi-VN') + ' ₫';
+}
+
+function updateTotal() {
+    let total = 0;
+
+    document.querySelectorAll('.select-item:checked').forEach(function (checkbox) {
+        total += parseInt(checkbox.dataset.price);
+    });
+
+    document.getElementById('total-price').innerText = formatVND(total);
+}
+
+// Tick từng item
+document.querySelectorAll('.select-item').forEach(function (checkbox) {
+    checkbox.addEventListener('change', updateTotal);
 });
 
+// Tick all
+document.getElementById('select-all')?.addEventListener('change', function (e) {
+    document.querySelectorAll('.select-item').forEach(function (checkbox) {
+        checkbox.checked = e.target.checked;
+    });
+    updateTotal();
+});
+
+// Xóa nhiều
 function deleteSelected() {
     const form = document.getElementById('delete-multiple-form');
 
-    // clear old inputs
-    form.querySelectorAll('input[name="selected[]"]').forEach(e => e.remove());
+    form.querySelectorAll('input[name="selected[]"]').forEach(i => i.remove());
 
-    // lấy checkbox đã chọn
-    document.querySelectorAll('.select-item:checked').forEach(cb => {
+    document.querySelectorAll('.select-item:checked').forEach(function (checkbox) {
         let input = document.createElement('input');
         input.type = 'hidden';
         input.name = 'selected[]';
-        input.value = cb.value;
+        input.value = checkbox.value;
         form.appendChild(input);
     });
 

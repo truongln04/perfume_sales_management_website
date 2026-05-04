@@ -52,12 +52,12 @@
                     </td>
                     <td>
                         <a href="{{ route('admin.orders.show', $o) }}"
-                           class="btn btn-sm btn-outline-primary">
+                           class="btn btn-sm btn-info">
                            Chi tiết
                         </a>
 
                         <a href="{{ route('admin.orders.edit', $o) }}"
-                           class="btn btn-sm btn-outline-warning">
+                           class="btn btn-sm btn-warning">
                            Cập nhật
                         </a>
                     </td>

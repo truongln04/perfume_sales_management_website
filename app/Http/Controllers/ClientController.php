@@ -13,127 +13,213 @@ class ClientController extends Controller
     /* ===========================
      * Trang chủ & sản phẩm
      * =========================== */
-    public function home() {
-        $products   = Product::orderBy('id_san_pham','desc')->take(8)->get();
-        $categories = Category::all();
-        $brands     = Brand::all();
+    public function home()
+{
+    $brands = Brand::all();
+    $categories = Category::all();
 
-        return view('client.home', compact('products','categories','brands'));
+    $productsByCategory = [];
+
+    foreach ($categories as $cat) {
+        $productsByCategory[$cat->id_danh_muc] = Product::where('id_danh_muc', $cat->id_danh_muc)
+            ->where('trang_thai', 1)
+            ->orderBy('id_san_pham', 'desc') 
+            ->take(20)
+            ->get();
     }
+
+    return view('client.home', compact(
+        'brands',
+        'categories',
+        'productsByCategory'
+    ));
+}
 
     public function products(Request $request) {
         $query = Product::query();
-        if ($request->filled('q')) {
-            $query->where('ten_san_pham','like','%'.$request->q.'%');
-        }
-        $products   = $query->paginate(12);
-        $categories = Category::all();
-
-        return view('client.products', compact('products','categories'));
+         //  Tìm kiếm theo tên
+    if ($request->filled('q')) {
+        $query->where('ten_san_pham', 'like', '%' . $request->q . '%');
     }
 
-    public function product($id) {
-        $product    = Product::with(['category','brand'])->findOrFail($id);
-        $categories = Category::all();
+    //  Lọc theo giá 
+    if ($request->price && $request->price !== 'all') {
+        [$min, $max] = explode('-', $request->price);
 
-        $related = Product::where('id_danh_muc',$product->id_danh_muc)
-                          ->where('id_san_pham','!=',$id)
-                          ->take(5)->get();
-
-        return view('client.product', compact('product','categories','related'));
+        $query->whereBetween('gia_ban', [(int)$min, (int)$max]);
     }
 
-    public function category($id) {
-        $products   = Product::where('id_danh_muc',$id)->paginate(12);
-        $categories = Category::all();
+    //  Nếu có trạng thái 
+    $query->where('trang_thai', 1);
 
-        return view('client.category', compact('products','categories'));
+    //  Phân trang 
+    $products = $query->paginate(12);
+
+    //  Danh mục 
+    $categories = Category::all();
+
+    return view('client.products', compact('products', 'categories'));
     }
 
-    /* ===========================
-     * Giỏ hàng
-     * =========================== */
-    public function cart()
-    {
-        $categories = Category::all();
-        $cartItems = session('cart', []);
-        return view('client.cart', compact('categories','cartItems'));
+    public function product($id)
+{
+    $product = Product::with(['category','brand'])
+        ->where('trang_thai', 1)
+        ->findOrFail($id);
+
+    $categories = Category::all();
+
+    $related = Product::where('id_danh_muc', $product->id_danh_muc)
+        ->where('id_san_pham', '!=', $id)
+        ->where('trang_thai', 1)
+        ->inRandomOrder()
+        ->take(5)
+        ->get();
+
+    return view('client.product', compact(
+        'product',
+        'categories',
+        'related'
+    ));
+}
+
+    public function category($id)
+{
+    // Lấy danh mục hiện tại
+    $category = Category::findOrFail($id);
+
+    // Query sản phẩm
+    $query = Product::where('id_danh_muc', $id);
+
+    // Lọc theo giá 
+    if (request()->price && request()->price !== 'all') {
+        [$min, $max] = explode('-', request()->price);
+
+        $query->whereBetween('gia_ban', [(int)$min, (int)$max]);
     }
 
-    public function addToCart(Request $request, $id)
-    {
-        $product = Product::findOrFail($id);
-        $cart = session()->get('cart', []);
+    // Phân trang
+    $products = $query->paginate(12);
 
-        if(isset($cart[$id])) {
-            $cart[$id]['quantity'] += $request->input('quantity',1);
-        } else {
-            $cart[$id] = [
-                'ten_san_pham' => $product->ten_san_pham,
-                'gia_ban'      => $product->gia_ban,
-                'hinh_anh'     => $product->hinh_anh, // URL ảnh
-                'quantity'     => $request->input('quantity',1),
-            ];
-        }
-        session()->put('cart',$cart);
-        return redirect()->route('client.cart')->with('success','Đã thêm sản phẩm vào giỏ hàng');
+    // Danh sách danh mục (nếu layout cần)
+    $categories = Category::all();
+
+    return view('client.category', compact(
+        'products',
+        'categories',
+        'category' 
+    ));
+}
+
+    public function brand(Request $request, $id) {
+    $categories = Category::all();
+    $brand      = Brand::findOrFail($id);
+
+    $query = Product::where('id_thuong_hieu', $id);
+
+    // Tìm kiếm 
+    if ($request->filled('q')) {
+        $query->where('ten_san_pham', 'like', '%' . $request->q . '%');
     }
 
-    public function updateCart(Request $request, $id)
-    {
-        $cart = session()->get('cart', []);
-        if(isset($cart[$id])) {
-            if($request->input('action')==='increase') {
-                $cart[$id]['quantity']++;
-            } elseif($request->input('action')==='decrease') {
-                $cart[$id]['quantity'] = max(1,$cart[$id]['quantity']-1);
-            }
-            session()->put('cart',$cart);
-        }
-        return back()->with('success','Cập nhật số lượng thành công');
+    // Lọc giá 
+    if ($request->filled('price') && $request->price != 'all') {
+        [$min, $max] = explode('-', $request->price);
+        $query->whereBetween('gia_ban', [$min, $max]);
     }
 
-    public function removeOne($id)
-    {
-        $cart = session()->get('cart', []);
-        unset($cart[$id]);
-        session()->put('cart',$cart);
-        return back()->with('success','Đã xóa sản phẩm');
+    $products = $query->paginate(12);
+
+    return view('client.brand', compact('products', 'categories', 'brand'));
     }
 
-    public function removeFromCart(Request $request)
-    {
-        $cart = session()->get('cart', []);
-        $selected = $request->input('selected', []);
-        foreach($selected as $id) {
-            unset($cart[$id]);
-        }
-        session()->put('cart',$cart);
-        return back()->with('success','Đã xóa sản phẩm đã chọn');
-    }
+    // /* ===========================
+    //  * Giỏ hàng
+    //  * =========================== */
+    // public function cart()
+    // {
+    //     $categories = Category::all();
+    //     $cartItems = session('cart', []);
+    //     return view('client.cart', compact('categories','cartItems'));
+    // }
 
-    public function clearCart()
-    {
-        session()->forget('cart');
-        return back()->with('success','Đã xóa toàn bộ giỏ hàng');
-    }
+    // public function addToCart(Request $request, $id)
+    // {
+    //     $product = Product::findOrFail($id);
+    //     $cart = session()->get('cart', []);
 
-    public function checkout(Request $request)
-    {
-        $cart = session()->get('cart', []);
-        if(empty($cart)) {
-            return redirect()->route('client.cart')->with('error','Giỏ hàng trống');
-        }
-        // tạo đơn hàng ở đây...
-        session()->forget('cart');
-        return redirect()->route('client.orderslist')->with('success','Đặt hàng thành công');
-    }
+    //     if(isset($cart[$id])) {
+    //         $cart[$id]['quantity'] += $request->input('quantity',1);
+    //     } else {
+    //         $cart[$id] = [
+    //             'ten_san_pham' => $product->ten_san_pham,
+    //             'gia_ban'      => $product->gia_ban,
+    //             'hinh_anh'     => $product->hinh_anh, // URL ảnh
+    //             'quantity'     => $request->input('quantity',1),
+    //         ];
+    //     }
+    //     session()->put('cart',$cart);
+    //     return redirect()->route('client.cart')->with('success','Đã thêm sản phẩm vào giỏ hàng');
+    // }
 
-public function checkoutPage()
+    // public function updateCart(Request $request, $id)
+    // {
+    //     $cart = session()->get('cart', []);
+    //     if(isset($cart[$id])) {
+    //         if($request->input('action')==='increase') {
+    //             $cart[$id]['quantity']++;
+    //         } elseif($request->input('action')==='decrease') {
+    //             $cart[$id]['quantity'] = max(1,$cart[$id]['quantity']-1);
+    //         }
+    //         session()->put('cart',$cart);
+    //     }
+    //     return back()->with('success','Cập nhật số lượng thành công');
+    // }
+
+    // public function removeOne($id)
+    // {
+    //     $cart = session()->get('cart', []);
+    //     unset($cart[$id]);
+    //     session()->put('cart',$cart);
+    //     return back()->with('success','Đã xóa sản phẩm');
+    // }
+
+    // public function removeFromCart(Request $request)
+    // {
+    //     $cart = session()->get('cart', []);
+    //     $selected = $request->input('selected', []);
+    //     foreach($selected as $id) {
+    //         unset($cart[$id]);
+    //     }
+    //     session()->put('cart',$cart);
+    //     return back()->with('success','Đã xóa sản phẩm đã chọn');
+    // }
+
+    // public function clearCart()
+    // {
+    //     session()->forget('cart');
+    //     return back()->with('success','Đã xóa toàn bộ giỏ hàng');
+    // }
+
+   public function checkoutPage()
 {
     $categories = Category::all();
-    $cartItems = session('cart', []);
-    return view('client.checkout', compact('categories','cartItems'));
+
+    // Lấy giỏ hàng từ database thay vì session
+    $cartItems = Cart::with('product')
+        ->where('id_tai_khoan', auth()->id())
+        ->get();
+
+    if ($cartItems->isEmpty()) {
+        return redirect()
+            ->route('client.cart')
+            ->with('error', 'Giỏ hàng trống');
+    }
+
+    return view(
+        'client.checkout',
+        compact('categories', 'cartItems')
+    );
 }
 
 

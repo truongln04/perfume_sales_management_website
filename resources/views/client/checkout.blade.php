@@ -62,17 +62,18 @@
                         <h4 class="fw-bold mb-4">Đơn hàng</h4>
 
                         @php
-                            $cart = session('cart', []);
-                            $totalPrice = collect($cart)->sum(fn($item) => $item['gia_ban'] * $item['quantity']);
-                        @endphp
+    $totalPrice = $cartItems->sum(function ($item) {
+        return $item->don_gia * $item->so_luong;
+    });
+@endphp
 
                         <table class="table">
-                            @foreach($cart as $item)
+                            @foreach($cartItems as $item)
                                 <tr>
-                                    <td>{{ $item['ten_san_pham'] }}</td>
-                                    <td>x{{ $item['quantity'] }}</td>
+                                    <td>{{ $item->product->ten_san_pham }}</td>
+                                    <td>x{{ $item->so_luong }}</td>
                                     <td class="text-end">
-                                        {{ number_format($item['gia_ban'] * $item['quantity']) }} ₫
+                                        {{ number_format($item->don_gia * $item->so_luong) }} ₫
                                     </td>
                                 </tr>
                             @endforeach

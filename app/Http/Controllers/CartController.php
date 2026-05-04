@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Http\Controllers;
+
 use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Category;
@@ -6,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    /* ===========================
+     /* ===========================
      * Giỏ hàng
      * =========================== */
     public function cart()
@@ -28,25 +31,49 @@ class CartController extends Controller
             'id_san_pham'  => $id,
         ]);
 
-        $cartItem->so_luong += $request->input('quantity', 1);
-        $cartItem->don_gia   = $product->gia_ban;
+        // Nếu chưa có thì mặc định = 0 rồi cộng thêm
+        $cartItem->so_luong = ($cartItem->so_luong ?? 0)
+            + $request->input('quantity', 1);
+
+        $cartItem->don_gia = $product->gia_ban;
+
         $cartItem->save();
 
-        return redirect()->route('client.cart')->with('success','Đã thêm sản phẩm vào giỏ hàng');
+        return redirect()
+            ->route('client.cart')
+            ->with('success', 'Đã thêm sản phẩm vào giỏ hàng');
     }
 
     public function updateCart(Request $request, $id)
     {
-        $cart = session()->get('cart', []);
-        if(isset($cart[$id])) {
-            if($request->input('action') === 'increase') {
-                $cart[$id]['quantity']++;
-            } elseif($request->input('action') === 'decrease') {
-                $cart[$id]['quantity'] = max(1, $cart[$id]['quantity'] - 1);
-            }
-            session()->put('cart', $cart);
+        $cartItem = Cart::where('id_gh', $id)
+            ->where('id_tai_khoan', auth()->id())
+            ->first();
+
+        if (!$cartItem) {
+            return back()->with(
+                'error',
+                'Sản phẩm không tồn tại trong giỏ hàng'
+            );
         }
-        return back()->with('success','Cập nhật số lượng thành công');
+
+        if ($request->input('action') === 'increase') {
+            $cartItem->so_luong += 1;
+        }
+
+        if ($request->input('action') === 'decrease') {
+            $cartItem->so_luong = max(
+                1,
+                $cartItem->so_luong - 1
+            );
+        }
+
+        $cartItem->save();
+
+        return back()->with(
+            'success',
+            'Cập nhật số lượng thành công'
+        );
     }
 
 

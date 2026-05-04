@@ -14,6 +14,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 
 // Trang chủ
 Route::get('/', function () {
@@ -56,9 +57,8 @@ Route::prefix('admin')
     ->group(function () {
 
         // Dashboard (ADMIN + NHANVIEN)
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // PROFILE ADMIN + NHANVIEN
 Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
@@ -101,6 +101,12 @@ Route::put('/profile/update', [AdminController::class, 'updateProfile'])->name('
                 Route::get('/donhang', [ReportController::class, 'donHang'])->name('reports.donhang');
                 Route::get('/tonkho', [ReportController::class, 'tonKho'])->name('reports.tonkho');
                 Route::get('/banchay', [ReportController::class, 'banChay'])->name('reports.banchay');
+
+                // Các route export Excel
+    Route::get('/doanhthu/export', [ReportController::class, 'exportDoanhThu'])->name('reports.doanhthu.export');
+    Route::get('/donhang/export', [ReportController::class, 'exportDonHang'])->name('reports.donhang.export');
+    Route::get('/tonkho/export', [ReportController::class, 'exportTonKho'])->name('reports.tonkho.export');
+    Route::get('/banchay/export', [ReportController::class, 'exportBanChay'])->name('reports.banchay.export');
             });
         });
     });
@@ -113,6 +119,7 @@ Route::put('/profile/update', [AdminController::class, 'updateProfile'])->name('
     Route::get('/category/{id}', [ClientController::class, 'category'])->name('client.category');
     Route::get('/cart', [ClientController::class, 'cart'])->name('client.cart');
     Route::post('/cart/add/{id}', [ClientController::class, 'addToCart'])->name('client.cart.add');
+    Route::get('/brand/{id}', [ClientController::class, 'brand'])->name('brand.show');
     Route::get('/orderslist', [ClientController::class, 'orderslist'])->name('client.orderslist');
     Route::get('/orders/{id}', [ClientController::class, 'orderShow'])->name('client.orders.show');   // thêm route này
     Route::put('/orders/{id}/cancel', [ClientController::class, 'orderCancel'])->name('client.orders.cancel'); // thêm route này
@@ -120,12 +127,30 @@ Route::put('/profile/update', [AdminController::class, 'updateProfile'])->name('
 //});
 
 Route::prefix('/cart')->group(function () {
-    Route::get('/', [ClientController::class,'cart'])->name('client.cart');
-    Route::post('/add/{id}', [ClientController::class,'addToCart'])->name('client.cart.add');
-    Route::put('/{id}', [ClientController::class,'updateCart'])->name('client.cart.update');
-    Route::delete('/', [ClientController::class,'removeFromCart'])->name('client.cart.remove'); // xoá nhiều
-    Route::delete('/{id}', [ClientController::class,'removeOne'])->name('client.cart.removeOne'); // xoá 1
-    Route::post('/clear', [ClientController::class,'clearCart'])->name('client.cart.clear');
+
+    // Hiển thị giỏ hàng
+    Route::get('/', [CartController::class, 'cart'])
+        ->name('client.cart');
+
+    // Thêm sản phẩm vào giỏ hàng
+    Route::post('/add/{id}', [CartController::class, 'addToCart'])
+        ->name('client.cart.add');
+
+    // Cập nhật số lượng (+ / -)
+    Route::put('/{id}', [CartController::class, 'updateCart'])
+        ->name('client.cart.update');
+
+    // Xóa nhiều sản phẩm đã chọn
+    Route::delete('/', [CartController::class, 'removeFromCart'])
+        ->name('client.cart.remove');
+
+    // Xóa 1 sản phẩm
+    Route::delete('/', [CartController::class, 'removeSelected'])
+    ->name('client.cart.remove');
+
+    // Xóa toàn bộ giỏ hàng
+    Route::delete('/{id}', [CartController::class, 'removeFromCart'])
+    ->name('client.cart.removeOne');
 });
 
 // CHECKOUT PAGE

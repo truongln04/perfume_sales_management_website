@@ -20,9 +20,11 @@
             <a href="{{ route('client.cart') }}" class="text-dark position-relative">
                 <i class="bi bi-cart3 fs-3"></i>
                 @php
-    $cart = session('cart', []);
-     $cartCount = count($cart);
-@endphp
+            $cartCount = \App\Models\Cart::where(
+                'id_tai_khoan',
+                auth()->id()
+            )->count('so_luong');
+        @endphp
 
 @if($cartCount > 0)
     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

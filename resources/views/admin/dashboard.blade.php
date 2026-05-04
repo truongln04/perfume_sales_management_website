@@ -13,30 +13,47 @@
 
     <!-- Các box thống kê -->
     <div class="row g-4">
+
+        {{-- Tài khoản --}}
         <div class="col-md-3">
             <div class="shadow rounded p-4 bg-white text-center">
-                {{-- <h3 class="fw-bold text-primary">{{ $taiKhoan }}</h3> --}}
-                <p class="m-0 text-muted">Tài khoản</p>
+                <h3 class="fw-bold text-primary">
+                    {{ $taiKhoan }}
+                </h3>
+                <p class="m-0 text-muted">👤 Tài khoản</p>
             </div>
         </div>
+
+        {{-- Sản phẩm --}}
         <div class="col-md-3">
             <div class="shadow rounded p-4 bg-white text-center">
-                {{-- <h3 class="fw-bold text-danger">{{ $sanPham }}</h3> --}}
-                <p class="m-0 text-muted">Sản phẩm</p>
+                <h3 class="fw-bold text-danger">
+                    {{ $sanPham }}
+                </h3>
+                <p class="m-0 text-muted">📦 Sản phẩm</p>
             </div>
         </div>
+
+        {{-- Đơn hàng mới --}}
         <div class="col-md-3">
             <div class="shadow rounded p-4 bg-white text-center">
-                {{-- <h3 class="fw-bold text-success">{{ $donHangMoi }}</h3> --}}
-                <p class="m-0 text-muted">Đơn hàng mới</p>
+                <h3 class="fw-bold text-success">
+                    {{ $donHangMoi }}
+                </h3>
+                <p class="m-0 text-muted">🧾 Đơn hàng mới</p>
             </div>
         </div>
+
+        {{-- Doanh thu --}}
         <div class="col-md-3">
             <div class="shadow rounded p-4 bg-white text-center">
-                {{-- <h3 class="fw-bold text-warning">{{ number_format($doanhThu,0,',','.') }} đ</h3> --}}
-                <p class="m-0 text-muted">Doanh thu</p>
+                <h3 class="fw-bold text-warning">
+                    {{ number_format($doanhThu,0,',','.') }} ₫
+                </h3>
+                <p class="m-0 text-muted">💰 Doanh thu</p>
             </div>
         </div>
+
     </div>
 
     <!-- Thông báo hệ thống -->
@@ -54,5 +71,6 @@
             <p class="mb-0">“Quản lý tốt là nghệ thuật biến sự phức tạp thành đơn giản.”</p>
         </blockquote>
     </div>
+
 </div>
 @endsection

@@ -6,10 +6,6 @@
     <!-- Header -->
     <div class="card-header d-flex justify-content-between align-items-center bg-white">
         <h5 class="m-0 text-primary fw-bold">Thêm tài khoản</h5>
-
-        <a href="{{ route('admin.accounts.index') }}" class="btn btn-secondary btn-sm">
-            ← Quay lại
-        </a>
     </div>
 
     <!-- Body -->
@@ -101,7 +97,7 @@
                         Lưu tài khoản
                     </button>
 
-                    <a href="{{ route('admin.accounts.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('admin.accounts.index') }}" class="btn btn-secondary">
                         Hủy
                     </a>
                 </div>
