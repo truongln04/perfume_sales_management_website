@@ -15,9 +15,9 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
     <div class="container-fluid">
 
-        <a class="navbar-brand fw-bold" href="/">
+        {{-- <a class="navbar-brand fw-bold" href="/">
             Perfume Shop
-        </a>
+        </a> --}}
 
         <div class="ms-auto d-flex align-items-center gap-2">
 

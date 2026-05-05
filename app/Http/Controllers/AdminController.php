@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Models\User;
+use App\Models\Product;
+use App\Models\Order;
+
 
 class AdminController extends Controller
 {
@@ -68,5 +72,22 @@ class AdminController extends Controller
         $user->update($data);
 
         return back()->with('success', 'Cập nhật thành công!');
+    }
+
+     public function dashboard()
+    {
+        // Đếm số tài khoản
+        $taiKhoan = User::count();
+
+        // Đếm số sản phẩm
+        $sanPham = Product::count();
+
+        // Đơn hàng mới (chờ xác nhận)
+        $donHangMoi = Order::where('trang_thai', Order::STATUS_CHO_XAC_NHAN)->count();
+
+        // Doanh thu: tổng tiền của đơn hàng đã thanh toán
+        $doanhThu = Order::where('trang_thai_tt', Order::PAYMENT_STATUS_DA_THANH_TOAN)->sum('tong_tien');
+
+        return view('admin.dashboard', compact('taiKhoan','sanPham','donHangMoi','doanhThu'));
     }
 }

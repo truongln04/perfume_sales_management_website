@@ -58,7 +58,7 @@ Route::prefix('admin')
 
         // Dashboard (ADMIN + NHANVIEN)
         
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+ Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
         // PROFILE ADMIN + NHANVIEN
 Route::get('/profile', [AdminController::class, 'profile'])->name('profile');
