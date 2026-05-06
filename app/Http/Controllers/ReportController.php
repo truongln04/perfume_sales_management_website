@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Category;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Facades\Response;
@@ -74,21 +75,66 @@ class ReportController extends Controller
     }
 
     // Tồn kho
-    public function tonKho()
-    {
-        $products = Product::with('warehouse')->get();
+    public function tonKho(Request $request)
+{
+    $query = DB::table('kho as k')
+        ->join('san_pham as sp', 'k.id_san_pham', '=', 'sp.id_san_pham')
+        ->leftJoin('danh_muc as dm', 'sp.id_danh_muc', '=', 'dm.id_danh_muc')
+        ->leftJoin('thuong_hieu as th', 'sp.id_thuong_hieu', '=', 'th.id_thuong_hieu')
+        ->select(
+            'sp.id_san_pham',
+            'sp.ten_san_pham as tenSanPham',
+            'k.so_luong_nhap as soLuongNhap',
+            'k.so_luong_ban as soLuongBan',
+            DB::raw('(k.so_luong_nhap - k.so_luong_ban) as tonKho'),
+            'dm.ten_danh_muc',
+            'th.ten_thuong_hieu'
+        );
 
-        $data = $products->map(function ($p) {
-            return [
-                'tenSanPham'  => $p->ten_san_pham,
-                'soLuongNhap' => $p->warehouse->so_luong_nhap ?? 0,
-                'soLuongBan'  => $p->warehouse->so_luong_ban ?? 0,
-                'tonKho'      => $p->warehouse->ton_kho_hien_tai ?? 0,
-            ];
-        });
+    // 🔍 Filter sản phẩm (2 chế độ)
+if ($request->filled('productCode')) {
 
-        return view('admin.reports.partials.tonkho', compact('data'));
+    // 👉 Ưu tiên nhập ID
+    $query->where('sp.id_san_pham', $request->productCode);
+
+} elseif ($request->filled('productSelect')) {
+
+    // 👉 Nếu không nhập thì lấy từ dropdown
+    $query->where('sp.id_san_pham', $request->productSelect);
+}
+
+    // 🔍 Filter danh mục
+    if ($request->filled('categoryId')) {
+        $query->where('dm.id_danh_muc', $request->categoryId);
     }
+
+    // 🔍 Filter thương hiệu
+    if ($request->filled('brandId')) {
+        $query->where('th.id_thuong_hieu', $request->brandId);
+    }
+
+    // 🔽 SORT
+    if ($request->sortBy == 'tonKho') {
+        $query->orderByRaw('(k.so_luong_nhap - k.so_luong_ban) DESC');
+    } elseif ($request->sortBy == 'soLuongNhap') {
+        $query->orderBy('k.so_luong_nhap', 'DESC');
+    } elseif ($request->sortBy == 'soLuongBan') {
+        $query->orderBy('k.so_luong_ban', 'DESC');
+    } else {
+        $query->orderBy('sp.id_san_pham');
+    }
+
+    $data = $query->get();
+
+    $products = Product::all();
+    $categories = Category::all();
+    $brands = DB::table('thuong_hieu')->get();
+
+    return view(
+        'admin.reports.partials.tonkho',
+        compact('data', 'products', 'categories', 'brands')
+    );
+}
 
     // Sản phẩm bán chạy
     public function banChay(Request $request)
@@ -190,31 +236,88 @@ class ReportController extends Controller
     }
 
     // Xuất Excel Tồn kho
-    public function exportTonKho()
-    {
-        $products = Product::with('warehouse')->get();
+    public function exportTonKho(Request $request)
+{
+    // 👉 Query giống hệt tonKho()
+    $query = DB::table('kho as k')
+        ->join('san_pham as sp', 'k.id_san_pham', '=', 'sp.id_san_pham')
+        ->leftJoin('danh_muc as dm', 'sp.id_danh_muc', '=', 'dm.id_danh_muc')
+        ->leftJoin('thuong_hieu as th', 'sp.id_thuong_hieu', '=', 'th.id_thuong_hieu')
+        ->select(
+            'sp.id_san_pham',
+            'sp.ten_san_pham',
+            'k.so_luong_nhap',
+            'k.so_luong_ban',
+            DB::raw('(k.so_luong_nhap - k.so_luong_ban) as ton_kho'),
+            'dm.ten_danh_muc',
+            'th.ten_thuong_hieu'
+        );
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Tên sản phẩm');
-        $sheet->setCellValue('B1', 'Số lượng nhập');
-        $sheet->setCellValue('C1', 'Số lượng bán');
-        $sheet->setCellValue('D1', 'Tồn kho hiện tại');
-
-        $row = 2;
-        foreach ($products as $p) {
-            $sheet->setCellValue("A$row", $p->ten_san_pham);
-            $sheet->setCellValue("B$row", $p->warehouse->so_luong_nhap ?? 0);
-            $sheet->setCellValue("C$row", $p->warehouse->so_luong_ban ?? 0);
-            $sheet->setCellValue("D$row", $p->warehouse->ton_kho_hien_tai ?? 0);
-            $row++;
-        }
-
-        return Response::streamDownload(function() use ($spreadsheet) {
-            $writer = new Xlsx($spreadsheet);
-            $writer->save('php://output');
-        }, 'ton-kho.xlsx');
+    // 🔍 Filter sản phẩm (2 chế độ)
+    if ($request->filled('productCode')) {
+        $query->where('sp.id_san_pham', $request->productCode);
+    } elseif ($request->filled('productSelect')) {
+        $query->where('sp.id_san_pham', $request->productSelect);
     }
+
+    // 🔍 Filter danh mục
+    if ($request->filled('categoryId')) {
+        $query->where('dm.id_danh_muc', $request->categoryId);
+    }
+
+    // 🔍 Filter thương hiệu
+    if ($request->filled('brandId')) {
+        $query->where('th.id_thuong_hieu', $request->brandId);
+    }
+
+    // 🔽 SORT
+    if ($request->sortBy == 'tonKho') {
+        $query->orderByRaw('(k.so_luong_nhap - k.so_luong_ban) DESC');
+    } elseif ($request->sortBy == 'soLuongNhap') {
+        $query->orderBy('k.so_luong_nhap', 'DESC');
+    } elseif ($request->sortBy == 'soLuongBan') {
+        $query->orderBy('k.so_luong_ban', 'DESC');
+    } else {
+        $query->orderBy('sp.id_san_pham');
+    }
+
+    $data = $query->get();
+
+    /*
+    |-----------------------------------------
+    | Tạo Excel
+    |-----------------------------------------
+    */
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header
+    $sheet->setCellValue('A1', 'ID sản phẩm');
+    $sheet->setCellValue('B1', 'Tên sản phẩm');
+    $sheet->setCellValue('C1', 'Danh mục');
+    $sheet->setCellValue('D1', 'Thương hiệu');
+    $sheet->setCellValue('E1', 'Số lượng nhập');
+    $sheet->setCellValue('F1', 'Số lượng bán');
+    $sheet->setCellValue('G1', 'Tồn kho');
+
+    // Data
+    $row = 2;
+    foreach ($data as $item) {
+        $sheet->setCellValue("A$row", $item->id_san_pham);
+        $sheet->setCellValue("B$row", $item->ten_san_pham);
+        $sheet->setCellValue("C$row", $item->ten_danh_muc);
+        $sheet->setCellValue("D$row", $item->ten_thuong_hieu);
+        $sheet->setCellValue("E$row", $item->so_luong_nhap);
+        $sheet->setCellValue("F$row", $item->so_luong_ban);
+        $sheet->setCellValue("G$row", $item->ton_kho);
+        $row++;
+    }
+
+    return Response::streamDownload(function () use ($spreadsheet) {
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+    }, 'ton-kho.xlsx');
+}
 
     // Xuất Excel Sản phẩm bán chạy
     public function exportBanChay(Request $request)

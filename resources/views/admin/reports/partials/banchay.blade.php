@@ -61,13 +61,13 @@
 
                 <div class="col-md-3 d-flex gap-2">
                     <button type="submit" class="btn btn-primary w-100">
-                        Lọc dữ liệu
+                        📊 Lọc dữ liệu
                     </button>
 
                     {{-- Xuất Excel --}}
                     <a href="{{ route('admin.reports.banchay.export', request()->all()) }}"
                        class="btn btn-success w-100">
-                        Excel
+                        📥 Excel
                     </a>
                 </div>
             </form>

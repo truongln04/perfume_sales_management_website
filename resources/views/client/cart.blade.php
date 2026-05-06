@@ -102,7 +102,13 @@
             </table>
         </div>
 
-        {{-- Tổng tiền --}}
+        {{-- FORM THANH TOÁN --}}
+        <form id="checkout-form"
+              action="{{ route('client.checkout') }}"
+              method="GET">
+        </form>
+
+        {{-- Tổng + action --}}
         <div class="d-flex justify-content-between align-items-center mt-4">
             <h4 class="mb-0">
                 Tổng tiền:
@@ -126,10 +132,11 @@
                     🗑 Xóa đã chọn
                 </button>
 
-                <a href="{{ route('client.checkout') }}"
-                   class="btn btn-primary btn-sm px-3 fw-bold rounded-pill shadow-sm">
+                {{-- ✅ NÚT THANH TOÁN MỚI --}}
+                <button onclick="goToCheckout()"
+                        class="btn btn-primary btn-sm px-3 fw-bold rounded-pill shadow-sm">
                     🛒 Thanh toán
-                </a>
+                </button>
 
             </div>
         </div>
@@ -181,6 +188,28 @@ function deleteSelected() {
 
     if (form.querySelectorAll('input[name="selected[]"]').length === 0) {
         alert('Vui lòng chọn sản phẩm!');
+        return;
+    }
+
+    form.submit();
+}
+
+// ✅ CHUYỂN SANG CHECKOUT
+function goToCheckout() {
+    const form = document.getElementById('checkout-form');
+
+    form.querySelectorAll('input[name="selected[]"]').forEach(i => i.remove());
+
+    document.querySelectorAll('.select-item:checked').forEach(function (checkbox) {
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'selected[]';
+        input.value = checkbox.value;
+        form.appendChild(input);
+    });
+
+    if (form.querySelectorAll('input[name="selected[]"]').length === 0) {
+        alert('Vui lòng chọn sản phẩm để thanh toán!');
         return;
     }
 

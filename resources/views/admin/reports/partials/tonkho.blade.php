@@ -29,56 +29,100 @@
 
     {{-- Bộ lọc + Xuất Excel --}}
     <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form method="GET"
-                  action="{{ route('admin.reports.tonkho') }}"
-                  class="row g-3 align-items-end">
+    <div class="card-body">
+        <form method="GET"
+              action="{{ route('admin.reports.tonkho') }}"
+              class="row g-3 align-items-end">
 
-                <div class="col-md-4">
-                    <label class="form-label">Tên sản phẩm</label>
-                    <input type="text"
-                           name="productName"
-                           class="form-control"
-                           value="{{ request('productName') }}"
-                           placeholder="Nhập tên sản phẩm...">
-                </div>
+            {{-- ✅ MÃ SẢN PHẨM (INPUT) --}}
+            <div class="col-md-3">
+                <label class="form-label">Mã sản phẩm</label>
+                <input type="number"
+                       name="productCode"
+                       class="form-control"
+                       value="{{ request('productCode') }}"
+                       placeholder="Nhập ID sản phẩm...">
+            </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Sắp xếp theo</label>
-                    <select name="sortBy" class="form-select">
-                        <option value="">-- Mặc định --</option>
-
-                        <option value="tonKho"
-                            {{ request('sortBy') == 'tonKho' ? 'selected' : '' }}>
-                            Tồn kho
-                        </option>
-
-                        <option value="soLuongNhap"
-                            {{ request('sortBy') == 'soLuongNhap' ? 'selected' : '' }}>
-                            Số lượng nhập
-                        </option>
-
-                        <option value="soLuongBan"
-                            {{ request('sortBy') == 'soLuongBan' ? 'selected' : '' }}>
-                            Số lượng bán
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-md-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        Lọc dữ liệu
-                    </button>
-
-                    {{-- Nút xuất Excel --}}
-                    <a href="{{ route('admin.reports.tonkho.export') }}"
-                       class="btn btn-success w-100">
-                        Excel
-                    </a>
-                </div>
-            </form>
-        </div>
+            <div class="col-md-3">
+    <label class="form-label">Tất cả sản phẩm theo bộ lọc</label>
+    <select name="productSelect" class="form-select">
+        <option value="">-- Chọn sản phẩm --</option>
+        @foreach($products as $p)
+            <option value="{{ $p->id_san_pham }}"
+                {{ request('productSelect') == $p->id_san_pham ? 'selected' : '' }}>
+                {{ $p->id_san_pham }} - {{ $p->ten_san_pham }}
+            </option>
+        @endforeach
+    </select>
     </div>
+
+            {{-- DANH MỤC --}}
+            <div class="col-md-3">
+                <label class="form-label">Danh mục</label>
+                <select name="categoryId" class="form-select">
+                    <option value="">Tất cả</option>
+                    @foreach($categories as $c)
+                        <option value="{{ $c->id_danh_muc }}"
+                            {{ request('categoryId') == $c->id_danh_muc ? 'selected' : '' }}>
+                            {{ $c->ten_danh_muc }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- THƯƠNG HIỆU --}}
+            <div class="col-md-3">
+                <label class="form-label">Thương hiệu</label>
+                <select name="brandId" class="form-select">
+                    <option value="">Tất cả</option>
+                    @foreach($brands as $b)
+                        <option value="{{ $b->id_thuong_hieu }}"
+                            {{ request('brandId') == $b->id_thuong_hieu ? 'selected' : '' }}>
+                            {{ $b->ten_thuong_hieu }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- SORT --}}
+            <div class="col-md-3">
+                <label class="form-label">Sắp xếp</label>
+                <select name="sortBy" class="form-select">
+                    <option value="">Mặc định</option>
+
+                    <option value="tonKho"
+                        {{ request('sortBy') == 'tonKho' ? 'selected' : '' }}>
+                        Tồn kho giảm dần
+                    </option>
+
+                    <option value="soLuongNhap"
+                        {{ request('sortBy') == 'soLuongNhap' ? 'selected' : '' }}>
+                        Nhập nhiều nhất
+                    </option>
+
+                    <option value="soLuongBan"
+                        {{ request('sortBy') == 'soLuongBan' ? 'selected' : '' }}>
+                        Bán nhiều nhất
+                    </option>
+                </select>
+            </div>
+
+            {{-- BUTTON --}}
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    📊 Lọc dữ liệu
+                </button>
+
+                <a href="{{ route('admin.reports.tonkho.export', request()->query()) }}"
+                   class="btn btn-success w-100">
+                    📥 Xuất Excel
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
 
     {{-- Biểu đồ --}}
     <div class="card shadow-sm mb-4">

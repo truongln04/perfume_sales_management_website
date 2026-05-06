@@ -201,24 +201,34 @@ class ClientController extends Controller
     //     return back()->with('success','Đã xóa toàn bộ giỏ hàng');
     // }
 
-   public function checkoutPage()
+   public function checkoutPage(Request $request)
 {
     $categories = Category::all();
 
-    // Lấy giỏ hàng từ database thay vì session
+    // Lấy danh sách ID đã chọn từ cart
+    $selectedIds = $request->selected;
+
+    if (!$selectedIds || count($selectedIds) == 0) {
+        return redirect()
+            ->route('client.cart')
+            ->with('error', 'Vui lòng chọn sản phẩm để thanh toán');
+    }
+
+    // Lấy đúng item đã chọn
     $cartItems = Cart::with('product')
         ->where('id_tai_khoan', auth()->id())
+        ->whereIn('id_gh', $selectedIds)
         ->get();
 
     if ($cartItems->isEmpty()) {
         return redirect()
             ->route('client.cart')
-            ->with('error', 'Giỏ hàng trống');
+            ->with('error', 'Không tìm thấy sản phẩm đã chọn');
     }
 
     return view(
         'client.checkout',
-        compact('categories', 'cartItems')
+        compact('categories', 'cartItems', 'selectedIds') // 🔥 QUAN TRỌNG
     );
 }
 

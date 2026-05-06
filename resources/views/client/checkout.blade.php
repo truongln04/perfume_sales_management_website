@@ -22,12 +22,16 @@
             </div>
         @endif
 
-        {{-- FORM --}}
         <form action="{{ route('client.orders.checkout') }}" method="POST" class="row">
             @csrf
 
-            {{-- LEFT: thông tin giao hàng --}}
-            <div class="col-lg-6 mb-4 order-lg-1">
+            {{-- ✅ GIỮ DANH SÁCH ĐÃ CHỌN --}}
+            @foreach($selectedIds as $id)
+                <input type="hidden" name="selected[]" value="{{ $id }}">
+            @endforeach
+
+            {{-- LEFT --}}
+            <div class="col-lg-6 mb-4">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
                         <h4 class="fw-bold mb-4">Thông tin giao hàng</h4>
@@ -38,7 +42,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label>Số điện thoại *</label>
+                            <label>SĐT *</label>
                             <input type="text" name="sdtNhan" class="form-control" required>
                         </div>
 
@@ -55,28 +59,37 @@
                 </div>
             </div>
 
-            {{-- RIGHT: đơn hàng + thanh toán --}}
-            <div class="col-lg-6 order-lg-2">
+            {{-- RIGHT --}}
+            <div class="col-lg-6">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body">
                         <h4 class="fw-bold mb-4">Đơn hàng</h4>
 
-                        @php
-    $totalPrice = $cartItems->sum(function ($item) {
-        return $item->don_gia * $item->so_luong;
-    });
-@endphp
+                        @php $totalPrice = 0; @endphp
 
                         <table class="table">
-                            @foreach($cartItems as $item)
+                            @forelse($cartItems as $item)
+
+                                @php
+                                    $thanhTien = $item->don_gia * $item->so_luong;
+                                    $totalPrice += $thanhTien;
+                                @endphp
+
                                 <tr>
                                     <td>{{ $item->product->ten_san_pham }}</td>
                                     <td>x{{ $item->so_luong }}</td>
                                     <td class="text-end">
-                                        {{ number_format($item->don_gia * $item->so_luong) }} ₫
+                                        {{ number_format($thanhTien,0,',','.') }} ₫
                                     </td>
                                 </tr>
-                            @endforeach
+
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">
+                                        Không có sản phẩm
+                                    </td>
+                                </tr>
+                            @endforelse
                         </table>
 
                         <hr>
@@ -84,7 +97,7 @@
                         <div class="d-flex justify-content-between">
                             <strong>Tổng:</strong>
                             <strong class="text-danger">
-                                {{ number_format($totalPrice) }} ₫
+                                {{ number_format($totalPrice,0,',','.') }} ₫
                             </strong>
                         </div>
 
@@ -93,22 +106,32 @@
                             <h5>Thanh toán</h5>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="phuongThucTT" value="COD" checked>
-                                <label class="form-check-label">COD</label>
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="phuongThucTT"
+                                       value="COD"
+                                       checked>
+                                <label class="form-check-label">
+                                    Thanh toán khi nhận hàng (COD)
+                                </label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="phuongThucTT" value="ONLINE">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="phuongThucTT"
+                                       value="ONLINE">
                                 <label class="form-check-label">
                                     <img src="https://developers.momo.vn/v3/vi/img/logo.svg" width="40">
-                                    MoMo
+                                    Thanh toán MoMo
                                 </label>
                             </div>
                         </div>
 
                         <button class="btn btn-warning w-100 mt-4 fw-bold">
-                            ĐẶT HÀNG
+                            🛒 ĐẶT HÀNG
                         </button>
+
                     </div>
                 </div>
             </div>

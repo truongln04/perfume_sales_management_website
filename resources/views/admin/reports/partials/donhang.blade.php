@@ -92,13 +92,13 @@
 
                 <div class="col-md-3 d-flex gap-2">
                     <button type="submit" class="btn btn-primary w-100">
-                        Lọc dữ liệu
+                       📊 Lọc dữ liệu
                     </button>
 
                     {{-- Nút xuất Excel --}}
                     <a href="{{ route('admin.reports.donhang.export', request()->all()) }}"
                        class="btn btn-success w-100">
-                        Excel
+                       📥 Excel
                     </a>
                 </div>
             </form>
