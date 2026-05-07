@@ -9,7 +9,7 @@
     </div>
 
     {{-- Thương hiệu nổi bật --}}
-    <h2 class="fw-bold mb-3">Thương hiệu nổi bật</h2>
+    <h2 class="fw-bold mb-3 text-center">Thương hiệu nổi bật</h2>
     <div class="row text-center mb-5">
         @foreach($brands as $brand)
             <div class="col">

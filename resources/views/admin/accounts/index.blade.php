@@ -1,10 +1,12 @@
 @extends('layouts.admin')
+@section('title', 'Quản lý tài khoản')
+@section('header', 'Quản lý tài khoản')
 
 @section('content')
 <div class="card mt-3">
 
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="m-0 text-primary fw-bold">Quản lý tài khoản</h5>
+        <h5 class="m-0 text-primary fw-bold"> </h5>
 
         <div class="d-flex gap-2">
             <a href="{{ route('admin.accounts.create') }}" class="btn btn-primary">
@@ -21,7 +23,12 @@
         </div>
     </div>
 
-   
+    {{-- Thông báo --}}
+    @if(session('success'))
+        <div class="alert alert-success m-3 mb-0">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div class="card-body p-0">
         <table class="table table-hover table-striped m-0">

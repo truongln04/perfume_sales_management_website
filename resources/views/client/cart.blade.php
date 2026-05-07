@@ -41,12 +41,16 @@
                             </td>
 
                             {{-- Ảnh --}}
+                           @php
+                                $src = $item->product->hinh_anh && Str::startsWith($item->product->hinh_anh, ['http://','https://'])
+                                    ? $item->product->hinh_anh
+                                    : asset('images/'.$item->product->hinh_anh);
+                            @endphp
+
                             <td>
-                                <img
-                                    src="{{ asset($item->product->hinh_anh) }}"
-                                    style="width:60px;height:60px;object-fit:cover"
-                                >
+                                <img src="{{ $src }}" style="width:60px;height:60px;object-fit:cover">
                             </td>
+
 
                             {{-- Tên --}}
                             <td>

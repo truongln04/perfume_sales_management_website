@@ -1,12 +1,13 @@
 @extends('layouts.admin')
-
+@section('title','Thêm tài khoản')
+@section('header','Thêm tài khoản')
 @section('content')
 <div class="card mt-3 shadow-sm border-0">
 
-    <!-- Header -->
+    {{-- <!-- Header -->
     <div class="card-header d-flex justify-content-between align-items-center bg-white">
         <h5 class="m-0 text-primary fw-bold">Thêm tài khoản</h5>
-    </div>
+    </div> --}}
 
     <!-- Body -->
     <div class="card-body">

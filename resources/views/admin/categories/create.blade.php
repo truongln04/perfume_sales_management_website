@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <h3 class="fw-bold text-primary mb-3">Thêm mới danh mục</h3>
+    {{-- <h3 class="fw-bold text-primary mb-3">Thêm mới danh mục</h3> --}}
 
     <form action="{{ route('admin.categories.store') }}" method="POST">
         @csrf

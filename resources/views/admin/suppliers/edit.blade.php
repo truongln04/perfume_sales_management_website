@@ -7,19 +7,19 @@
     <form action="{{ route('admin.suppliers.update',$supplier) }}" method="POST">@csrf @method('PUT')
         <div class="mb-3">
             <label>Tên nhà cung cấp</label>
-            <input name="ten_ncc" class="form-control" value="{{ $supplier->ten_ncc }}" required>
+            <input name="ten_ncc" class="form-control" value="{{ $supplier->ten_ncc }}">
         </div>
         <div class="mb-3">
             <label>Địa chỉ</label>
-            <input name="dia_chi" class="form-control" value="{{ $supplier->dia_chi }}" required>
+            <input name="dia_chi" class="form-control" value="{{ $supplier->dia_chi }}">
         </div>
         <div class="mb-3">
             <label>Số điện thoại</label>
-            <input name="sdt" class="form-control" value="{{ $supplier->sdt }}" required>
+            <input name="sdt" class="form-control" value="{{ $supplier->sdt }}" >
         </div>
         <div class="mb-3">
             <label>Email</label>
-            <input name="email" type="email" class="form-control" value="{{ $supplier->email }}" required>
+            <input name="email" type="email" class="form-control" value="{{ $supplier->email }}" >
         </div>
         <div class="mb-3">
             <label>Ghi chú</label>

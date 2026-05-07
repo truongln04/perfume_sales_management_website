@@ -8,7 +8,7 @@
 
     {{-- Header --}}
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="m-0 text-primary fw-bold">Quản lý thương hiệu</h5>
+        <h5 class="m-0 text-primary fw-bold"> </h5>
 
         <div class="d-flex gap-2">
             <a href="{{ route('admin.brands.create') }}" class="btn btn-primary">
@@ -25,7 +25,12 @@
             </form>
         </div>
     </div>
-
+ {{-- Thông báo --}}
+    @if(session('success'))
+        <div class="alert alert-success m-3 mb-0">
+            {{ session('success') }}
+        </div>
+    @endif
     {{-- Nội dung --}}
     <div class="card-body p-0">
         <table class="table table-hover table-striped m-0 align-middle">

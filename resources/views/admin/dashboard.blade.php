@@ -1,12 +1,12 @@
 @extends('layouts.admin')
 @section('title','Trang chủ quản trị')
-@section('header','Quản trị hệ thống')
+@section('header','Trang chủ quản trị')
 
 @section('content')
 <div class="container-fluid p-4">
 
     <div class="text-center mb-5">
-        <h1 class="fw-bold text-dark display-4">Quản trị hệ thống</h1>
+        {{-- <h1 class="fw-bold text-dark display-4">Trang chủ quản trị</h1> --}}
         <p class="text-muted fs-5">Chào mừng bạn đến với bảng điều khiển quản lý nước hoa</p>
         <p class="fst-italic text-secondary">🌸 “Sự tinh tế nằm trong từng giọt hương” 🌸</p>
     </div>

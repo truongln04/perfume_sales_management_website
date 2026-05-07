@@ -9,7 +9,7 @@
 
         <div class="mb-3">
             <label>Danh mục</label>
-            <select name="id_danh_muc" class="form-select" required>
+            <select name="id_danh_muc" class="form-select" >
                 <option value="">-- Chọn danh mục --</option>
                 @foreach($categories as $dm)
                     <option value="{{ $dm->id_danh_muc }}" {{ $product->id_danh_muc == $dm->id_danh_muc ? 'selected' : '' }}>
@@ -21,7 +21,7 @@
 
         <div class="mb-3">
             <label>Thương hiệu</label>
-            <select name="id_thuong_hieu" class="form-select" required>
+            <select name="id_thuong_hieu" class="form-select" >
                 <option value="">-- Chọn thương hiệu --</option>
                 @foreach($brands as $th)
                     <option value="{{ $th->id_thuong_hieu }}" {{ $product->id_thuong_hieu == $th->id_thuong_hieu ? 'selected' : '' }}>
@@ -33,7 +33,7 @@
 
         <div class="mb-3">
             <label>Nhà cung cấp</label>
-            <select name="id_ncc" class="form-select" required>
+            <select name="id_ncc" class="form-select" >
                 <option value="">-- Chọn nhà cung cấp --</option>
                 @foreach($suppliers as $ncc)
                     <option value="{{ $ncc->id_ncc }}" {{ $product->id_ncc == $ncc->id_ncc ? 'selected' : '' }}>
@@ -45,12 +45,12 @@
 
         <div class="mb-3">
             <label>Tên sản phẩm</label>
-            <input name="ten_san_pham" class="form-control" value="{{ $product->ten_san_pham }}" required>
+            <input name="ten_san_pham" class="form-control" value="{{ $product->ten_san_pham }}" >
         </div>
 
         <div class="mb-3">
             <label>Mô tả</label>
-            <textarea name="mo_ta" class="form-control" required>{{ $product->mo_ta }}</textarea>
+            <textarea name="mo_ta" class="form-control" >{{ $product->mo_ta }}</textarea>
         </div>
 
         <div class="mb-3">
@@ -75,7 +75,7 @@
 
         <div class="mb-3">
             <label>Giá bán</label>
-            <input type="number" name="gia_ban" class="form-control" value="{{ $product->gia_ban }}" required>
+            <input type="number" name="gia_ban" class="form-control" value="{{ $product->gia_ban }}" >
         </div>
 
         <div class="mb-3">

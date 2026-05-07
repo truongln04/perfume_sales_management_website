@@ -7,7 +7,7 @@
     <form action="{{ route('admin.receipts.store') }}" method="POST">@csrf
         <div class="mb-3">
             <label>Nhà cung cấp</label>
-            <select name="id_ncc" id="supplierSelect" class="form-select" required>
+            <select name="id_ncc" id="supplierSelect" class="form-select" >
                 <option value="">-- Chọn nhà cung cấp --</option>
                 @foreach($suppliers as $s)
                     <option value="{{ $s->id_ncc }}">{{ $s->ten_ncc }}</option>
@@ -16,7 +16,7 @@
         </div>
         <div class="mb-3">
             <label>Ngày nhập</label>
-            <input type="date" name="ngay_nhap" class="form-control" required>
+            <input type="date" name="ngay_nhap" class="form-control" >
         </div>
         <div class="mb-3">
             <label>Ghi chú</label>
@@ -27,7 +27,7 @@
         <div id="details">
             <div class="row mb-2">
                 <div class="col-md-4">
-                    <select name="details[0][id_san_pham]" id="productSelect0" class="form-select" required>
+                    <select name="details[0][id_san_pham]" id="productSelect0" class="form-select" >
                         <option value="">-- Chọn sản phẩm --</option>
                     </select>
                 </div>
@@ -77,7 +77,7 @@ function addDetail(){
     const html = `
     <div class="row mb-2">
         <div class="col-md-4">
-            <select name="details[${detailIndex}][id_san_pham]" id="productSelect${detailIndex}" class="form-select" required>
+            <select name="details[${detailIndex}][id_san_pham]" id="productSelect${detailIndex}" class="form-select" >
                 <option value="">-- Chọn sản phẩm --</option>
             </select>
         </div>

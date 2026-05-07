@@ -1,10 +1,12 @@
 @extends('layouts.admin')
+@section('title', 'Quản lý đơn hàng')
+@section('header', 'Quản lý đơn hàng')
 
 @section('content')
 <div class="card">
 
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="m-0 text-primary fw-bold">Quản lý đơn hàng</h5>
+        <h5 class="m-0 text-primary fw-bold"> </h5>
 
         <form method="GET" action="{{ route('admin.orders.index') }}" class="d-flex gap-2">
             <input type="text" name="keyword" class="form-control"

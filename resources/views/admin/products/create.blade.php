@@ -7,7 +7,7 @@
     <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">@csrf
         <div class="mb-3">
             <label>Danh mục</label>
-            <select name="id_danh_muc" class="form-select" required>
+            <select name="id_danh_muc" class="form-select" >
                 <option value="">-- Chọn danh mục --</option>
                 @foreach($categories as $dm)
                     <option value="{{ $dm->id_danh_muc }}">{{ $dm->ten_danh_muc }}</option>
@@ -17,7 +17,7 @@
 
         <div class="mb-3">
             <label>Thương hiệu</label>
-            <select name="id_thuong_hieu" class="form-select" required>
+            <select name="id_thuong_hieu" class="form-select" >
                 <option value="">-- Chọn thương hiệu --</option>
                 @foreach($brands as $th)
                     <option value="{{ $th->id_thuong_hieu }}">{{ $th->ten_thuong_hieu }}</option>
@@ -27,7 +27,7 @@
 
         <div class="mb-3">
             <label>Nhà cung cấp</label>
-            <select name="id_ncc" class="form-select" required>
+            <select name="id_ncc" class="form-select" >
                 <option value="">-- Chọn nhà cung cấp --</option>
                 @foreach($suppliers as $ncc)
                     <option value="{{ $ncc->id_ncc }}">{{ $ncc->ten_ncc }}</option>
@@ -35,11 +35,11 @@
             </select>
         </div>
 
-        <div class="mb-3"><label>Tên sản phẩm</label><input name="ten_san_pham" class="form-control" required></div>
+        <div class="mb-3"><label>Tên sản phẩm</label><input name="ten_san_pham" class="form-control" ></div>
         <div class="mb-3"><label>Mô tả</label><textarea name="mo_ta" class="form-control"></textarea></div>
         <div class="mb-3"><label>Hình ảnh</label><input type="file" name="hinh_anh" class="form-control"></div>
         {{-- <div class="mb-3"><label>Giá nhập</label><input type="number" name="gia_nhap" class="form-control"></div> --}}
-        <div class="mb-3"><label>Giá bán</label><input type="number" name="gia_ban" class="form-control" required></div>
+        <div class="mb-3"><label>Giá bán</label><input type="number" name="gia_ban" class="form-control" ></div>
         <div class="mb-3"><label>Khuyến mãi (%)</label><input type="number" name="km_phan_tram" class="form-control"></div>
         {{-- <div class="mb-3"><label>Số lượng tồn</label><input type="number" name="so_luong_ton" class="form-control"></div> --}}
         <div class="mb-3">

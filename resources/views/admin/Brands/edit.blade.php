@@ -5,9 +5,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="card shadow-sm">
-        <div class="card-header">
+        {{-- <div class="card-header">
             <h5 class="mb-0 text-primary fw-bold">Cập nhật thương hiệu</h5>
-        </div>
+        </div> --}}
 
         <div class="card-body">
             <form action="{{ route('admin.brands.update', $brand) }}"
@@ -23,7 +23,7 @@
                            name="ten_thuong_hieu"
                            class="form-control"
                            value="{{ old('ten_thuong_hieu', $brand->ten_thuong_hieu) }}"
-                           required>
+                           >
                 </div>
 
                 {{-- Quốc gia --}}
@@ -33,7 +33,7 @@
                            name="quoc_gia"
                            class="form-control"
                            value="{{ old('quoc_gia', $brand->quoc_gia) }}"
-                           required>
+                           >
                 </div>
 
                 {{-- Logo URL --}}
@@ -73,7 +73,7 @@
 
                 {{-- Nút --}}
                 <div class="mt-4">
-<button type="submit" class="btn btn-success">
+                <button type="submit" class="btn btn-success">
                         Cập nhật
                     </button>
 

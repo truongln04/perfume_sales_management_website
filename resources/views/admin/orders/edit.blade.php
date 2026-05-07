@@ -1,4 +1,6 @@
 @extends('layouts.admin')
+@section('title','Cập nhật đơn hàng')
+@section('header','Cập nhật đơn hàng')
 @section('content')
 <div class="card">
  <div class="card-header"><h5>Cập nhật đơn hàng #{{ $order->id_don_hang }}</h5></div>
