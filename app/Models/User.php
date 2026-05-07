@@ -52,4 +52,10 @@ class User extends Authenticatable
     {
         return $this->mat_khau;
     }
+
+    public function orders()
+{
+    return $this->hasMany(Order::class, 'id_tai_khoan', 'id_tai_khoan');
+}
+
 }

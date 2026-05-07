@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Http\Requests\AccountRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,7 +15,7 @@ class AccountController extends Controller
         $query = User::query();
 
         if ($request->search) {
-            $query->where('name', 'like', '%' . $request->search . '%')
+            $query->where('ten_hien_thi', 'like', '%' . $request->search . '%')
                   ->orWhere('email', 'like', '%' . $request->search . '%');
         }
 
@@ -30,23 +31,16 @@ class AccountController extends Controller
     }
 
     // Lưu thêm mới
-    public function store(Request $request)
+    public function store(AccountRequest $request)
     {
-        $request->validate([
-            'ten_hien_thi' => 'required|string|max:100',
-        'email'        => 'required|email|unique:tai_khoan,email',
-        'mat_khau'     => 'required|min:6',
-        'vai_tro'      => 'required',
-        ]);
-
         User::create([
             'ten_hien_thi' => $request->ten_hien_thi,
-        'email'        => $request->email,
-        'sdt'          => $request->sdt,
-        'google_id'    => $request->google_id,
-        'anh_dai_dien' => $request->anh_dai_dien,
-        'mat_khau'     => Hash::make($request->mat_khau),
-        'vai_tro'      => $request->vai_tro,
+            'email'        => $request->email,
+            'sdt'          => $request->sdt,
+            'google_id'    => $request->google_id,
+            'anh_dai_dien' => $request->anh_dai_dien,
+            'mat_khau'     => Hash::make($request->mat_khau),
+            'vai_tro'      => $request->vai_tro,
         ]);
 
         return redirect()->route('admin.accounts.index')
@@ -54,31 +48,23 @@ class AccountController extends Controller
     }
 
     // Trang sửa
-    public function edit($id)
+    public function edit(User $account)
     {
-        $account = User::findOrFail($id);
         return view('admin.accounts.edit', compact('account'));
     }
 
     // Cập nhật
-    public function update(Request $request, $id)
+    public function update(AccountRequest $request, User $account)
     {
-        $account = User::findOrFail($id);
-
-        $request->validate([
-            'ten_hien_thi'     => 'required|string|max:100',
-            'email'    => 'required|email|unique:tai_khoan,email,' . $id . ',id_tai_khoan',
-        ]);
-
         $account->ten_hien_thi = $request->ten_hien_thi;
-        $account->email = $request->email;
-        $account->sdt = $request->sdt;
-        $account->google_id = $request->google_id;
+        $account->email        = $request->email;
+        $account->sdt          = $request->sdt;
+        $account->google_id    = $request->google_id;
         $account->anh_dai_dien = $request->anh_dai_dien;
-        $account->vai_tro = $request->vai_tro;
+        $account->vai_tro      = $request->vai_tro;
 
         if ($request->mat_khau) {
-            $account->password = Hash::make($request->mat_khau);
+            $account->mat_khau = Hash::make($request->mat_khau);
         }
 
         $account->save();
@@ -88,9 +74,15 @@ class AccountController extends Controller
     }
 
     // Xóa
-    public function destroy($id)
+    public function destroy(User $account)
     {
-        $account = User::findOrFail($id);
+        // Kiểm tra nếu tài khoản có đơn hàng liên quan
+        if ($account->orders()->count() > 0) {
+            return redirect()
+                ->route('admin.accounts.index')
+                ->with('error', 'Không thể xóa tài khoản vì đang có đơn hàng liên quan!');
+        }
+
         $account->delete();
 
         return redirect()->route('admin.accounts.index')
@@ -102,7 +94,7 @@ class AccountController extends Controller
     {
         $keyword = $request->keyword;
 
-        $accounts = User::where('name', 'like', "%$keyword%")
+        $accounts = User::where('ten_hien_thi', 'like', "%$keyword%")
             ->orWhere('email', 'like', "%$keyword%")
             ->get();
 

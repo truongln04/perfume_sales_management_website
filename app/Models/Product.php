@@ -78,4 +78,15 @@ class Product extends Model
     public function getSoLuongTonAttribute() {
         return $this->warehouse ? $this->warehouse->ton_kho_hien_tai : 0;
     }
+
+    // Quan hệ: một sản phẩm có nhiều chi tiết đơn hàng
+    public function orders()
+    {
+        return $this->hasMany(OrderDetail::class, 'id_san_pham', 'id_san_pham');
+    }
+    public function phieuNhaps()
+{
+    return $this->hasMany(ChiTietPhieuNhap::class, 'id_san_pham', 'id_san_pham');
+}
+
 }
