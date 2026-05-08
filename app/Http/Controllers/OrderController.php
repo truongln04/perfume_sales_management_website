@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Cart;
 use App\Mail\OrderCompletedMail;
+use App\Mail\NewOrderAdminMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -75,7 +76,7 @@ class OrderController extends Controller
         ]);
 
         // 👉 Lưu trạng thái cũ
-    $oldStatus = $order->trang_thai;
+        $oldStatus = $order->trang_thai;
 
 
         $order->update([
@@ -171,6 +172,10 @@ class OrderController extends Controller
             'trang_thai'     => 'CHO_XAC_NHAN',
             'trang_thai_tt'  => 'CHUA_THANH_TOAN',
         ]);
+
+        // 🚀 Gửi mail cho ADMIN khi có đơn mới
+    Mail::to(config('mail.admin_email'))
+    ->send(new NewOrderAdminMail($order));
 
         // 👉 Lưu chi tiết đơn
         foreach ($cartItems as $item) {
@@ -304,6 +309,10 @@ class OrderController extends Controller
         'trang_thai'     => 'CHO_XAC_NHAN',
         'trang_thai_tt'  => 'DA_THANH_TOAN',
     ]);
+
+    // 🚀 Gửi mail cho ADMIN khi có đơn mới
+    Mail::to(config('mail.admin_email'))
+        ->send(new NewOrderAdminMail($order));
 
     foreach ($cartItems as $item) {
         OrderDetail::create([

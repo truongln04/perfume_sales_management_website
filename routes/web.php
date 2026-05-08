@@ -140,15 +140,11 @@ Route::prefix('/cart')->group(function () {
     Route::put('/{id}', [CartController::class, 'updateCart'])
         ->name('client.cart.update');
 
-    // Xóa nhiều sản phẩm đã chọn
-    Route::delete('/', [CartController::class, 'removeFromCart'])
-        ->name('client.cart.remove');
-
-    // Xóa 1 sản phẩm
+    // Xóa 1 sản phẩm toàn bộ giỏ hàng
     Route::delete('/', [CartController::class, 'removeSelected'])
     ->name('client.cart.remove');
 
-    // Xóa toàn bộ giỏ hàng
+    // Xóa 1 sản phẩm
     Route::delete('/{id}', [CartController::class, 'removeFromCart'])
     ->name('client.cart.removeOne');
 });
