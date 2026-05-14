@@ -7,7 +7,7 @@
 
     {{-- Header --}}
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="m-0 text-primary fw-bold"> </h5>
+        <h5 class="m-0 text-primary fw-bold">Quản lý kho</h5>
 
         {{-- Ô tìm kiếm --}}
         <form method="GET" action="{{ route('admin.warehouse.index') }}" class="d-flex gap-2">
