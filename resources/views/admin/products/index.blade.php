@@ -7,7 +7,7 @@
 
     {{-- Header --}}
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="m-0 text-primary fw-bold"> </h5>
+        <h5 class="m-0 text-primary fw-bold">Quản lý sản phẩm</h5>
         <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Thêm mới</a>
     </div>
 

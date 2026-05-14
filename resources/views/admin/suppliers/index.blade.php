@@ -7,7 +7,7 @@
 
     {{-- Header --}}
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="m-0 text-primary fw-bold"> </h5>
+        <h5 class="m-0 text-primary fw-bold">Quản lý nhà cung cấp</h5>
 
         <div class="d-flex gap-2">
             <a href="{{ route('admin.suppliers.create') }}" class="btn btn-primary">

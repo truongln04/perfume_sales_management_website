@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Cart;
+use App\Models\WarehouseItem;
 use App\Mail\OrderCompletedMail;
 use App\Mail\NewOrderAdminMail;
 use Illuminate\Support\Facades\Auth;
@@ -85,15 +86,64 @@ class OrderController extends Controller
             'ghi_chu'       => $request->ghi_chu
         ]);
 
-        // 🚀 Gửi mail nếu chuyển sang HOÀN THÀNH
+     // HOÀN THÀNH -> cộng số lượng bán
     if (
         $request->trang_thai == Order::STATUS_HOAN_THANH &&
         $oldStatus != Order::STATUS_HOAN_THANH
     ) {
-        // đảm bảo có user + email
+        // Load chi tiết đơn hàng
+    $order->load('chiTietDonHang');
+
+    // Cập nhật kho
+    foreach ($order->chiTietDonHang as $detail) {
+
+        $warehouse = WarehouseItem::where(
+            'id_san_pham',
+            $detail->id_san_pham
+        )->first();
+
+        if ($warehouse) {
+
+            // Tăng số lượng bán
+            $warehouse->so_luong_ban += $detail->so_luong;
+
+            $warehouse->save();
+        }
+    }
+        // Gửi mail nếu chuyển sang HOÀN THÀNH
         if ($order->user && $order->user->email) {
             Mail::to($order->user->email)
                 ->send(new OrderCompletedMail($order));
+        }
+    }
+
+    // TRẢ HÀNG -> trừ số lượng bán
+    if (
+        $request->trang_thai == Order::STATUS_TRA_HANG &&
+        $oldStatus == Order::STATUS_HOAN_THANH
+    ) {
+
+        $order->load('chiTietDonHang');
+
+        foreach ($order->chiTietDonHang as $detail) {
+
+            $warehouse = WarehouseItem::where(
+                'id_san_pham',
+                $detail->id_san_pham
+            )->first();
+
+            if ($warehouse) {
+
+                // trừ số lượng bán
+                $warehouse->so_luong_ban -= $detail->so_luong;
+
+                // tránh âm kho
+                if ($warehouse->so_luong_ban < 0) {
+                    $warehouse->so_luong_ban = 0;
+                }
+
+                $warehouse->save();
+            }
         }
     }
 

@@ -6,7 +6,7 @@
 <div class="card mt-3">
 
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="m-0 text-primary fw-bold"> </h5>
+        <h5 class="m-0 text-primary fw-bold"> Quản lý tài khoản </h5>
 
         <div class="d-flex gap-2">
             <a href="{{ route('admin.accounts.create') }}" class="btn btn-primary">

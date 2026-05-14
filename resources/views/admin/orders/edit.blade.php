@@ -15,6 +15,9 @@
        <span class="badge {{ $order->trang_thai=='HUY'?'bg-secondary':'bg-danger' }}">
          {{ \App\Models\Order::statusLabels()[$order->trang_thai] }}
        </span>
+       <input type="hidden"
+          name="trang_thai"
+          value="{{ $order->trang_thai }}">
      @else
        <select name="trang_thai" class="form-select">
          @if($order->trang_thai=='CHO_XAC_NHAN')
@@ -42,8 +45,8 @@
      <label>Trạng thái thanh toán</label>
      @if($order->trang_thai=='HUY' && $order->phuong_thuc_tt=='COD')
        <span class="badge bg-secondary">Chưa TT</span>
-     @elseif($order->trang_thai=='HUY' && $order->phuong_thuc_tt=='ONLINE')
-       @if(in_array($order->trang_thai_tt,['HOAN_TIEN','DA_HOAN_TIEN']))
+     @elseif(in_array($order->trang_thai,['HUY','TRA_HANG']) && $order->phuong_thuc_tt=='ONLINE')
+       @if($order->trang_thai_tt=='DA_HOAN_TIEN')
          <span class="badge bg-danger">
            {{ \App\Models\Order::paymentStatusLabels()[$order->trang_thai_tt] }}
          </span>
